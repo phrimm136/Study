@@ -1,0 +1,10 @@
+(define (fast-expt b n)
+  (define (square x) (* x x))
+  (define (even? n) (= (remainder n 2) 0))
+  (define (fast-expt-iter b exp n)
+    (cond ((= n 0) exp)
+          ((even? n) (fast-expt-iter (square b) exp (/ n 2)))
+          (else (fast-expt-iter b (* b exp) (- n 1)))))
+  (fast-expt-iter b 1 n))
+
+(fast-expt 2 10)
