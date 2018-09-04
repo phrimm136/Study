@@ -27,6 +27,8 @@
 (define (log2 x)
   (/ (log x) (log 2)))
 (define (root n x)
-  (fixed-point ((repeated average-damp (floor (log2 n))) (lambda (y) (/ x (expt y (- n 1))))) 1.0))
+  (fixed-point ((repeated average-damp (log2 n)) (lambda (y) (/ x (expt y (- n 1))))) 1.0))
 
 (root 10 10000000000)
+
+; nth roots need log_2-nth average-damp (truncated)
