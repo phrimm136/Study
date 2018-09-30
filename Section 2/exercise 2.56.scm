@@ -2,6 +2,7 @@
 (define (=number? vari cons) (and (number? vari) (= vari cons)))
 (define (variable? x) (symbol? x))
 (define (same-variable? x1 x2) (and (variable? x1) (variable? x2) (eq? x1 x2)))
+
 (define (make-sum a1 a2)
   (cond ((=number? a1 0) a2)
         ((=number? a2 0) a1)
@@ -20,6 +21,7 @@
         ((=number? e2 1) e1)
         ((and (number? e1) (number? e2)) (expt e1 e2))
         (else (list '** e1 e2))))
+
 (define (sum? x) (and (pair? x) (eq? (car x) '+)))
 (define (addend s) (cadr s))
 (define (augend s) (caddr s))
@@ -47,5 +49,6 @@
                        (deriv (base exp) var)))
         (else
          (error "unknown expression type -- DERIV" exp))))
+
 
 (deriv '(** x 3) 'x) ; (* 3 (** x 2))
