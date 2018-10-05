@@ -16,20 +16,6 @@
           (else (get-helper k (cdr array)))))
   (get-helper (list op type) global-array))
 ; get/put
-(define global-array-coercion '())
-(define (put-coercion op type item)
-  (define (put-helper k array)
-    (cond ((null? array) (list (make-entry k item)))
-          ((equal? (key (car array)) k) array)
-          (else (cons (car array) (put-helper k (cdr array))))))
-  (set! global-array-coercion (put-helper (list op type) global-array-coercion)))
-(define (get-coercion op type)
-  (define (get-helper k array)
-    (cond ((null? array) #f)
-          ((equal? (key (car array)) k) (value (car array)))
-          (else (get-helper k (cdr array)))))
-  (get-helper (list op type) global-array-coercion))
-;get-coercion/put-coercion
 
 
 (define (square x) (* x x))
@@ -41,13 +27,12 @@
 
 (define (apply-generic op . args)
   (define type-tower (list (list 'integer 1) (list 'rational 2) (list 'real 3) (list 'complex 4)))
-  (define (type-rank type tower) (cond ((null? type) (error "Undefined type"))
+  (define (type-rank type tower) (cond ((null? tower) (error "Undefined type"))
                                        ((eq? type (type-tag (car tower))) (car (contents (car tower))))
                                        (else (type-rank type (cdr tower)))))
   (let ((type-tags (map type-tag args)))
-    (let ((proc (get op type-tags)) (corc (get-coercion op type-tags)))
+    (let ((proc (get op type-tags)))
       (cond (proc (apply proc (map contents args)))
-            (corc (apply corc (map contents args)))
             ((= (length args) 2) (let ((type-rank1 (type-rank (car type-tags) type-tower))
                                        (type-rank2 (type-rank (cadr type-tags) type-tower))
                                        (a1 (car args)) (a2 (cadr args)))
@@ -182,9 +167,9 @@
   (define (raise-rational-to-real x) (make-real (/ (car x) (cdr x))))
   (define (raise-real-to-complex x) (make-complex-from-real-imag x 0))
 
-  (put-coercion 'raise '(integer) raise-integer-to-rational)
-  (put-coercion 'raise '(rational) raise-rational-to-real)
-  (put-coercion 'raise '(real) raise-real-to-complex)
+  (put 'raise '(integer) raise-integer-to-rational)
+  (put 'raise '(rational) raise-rational-to-real)
+  (put 'raise '(real) raise-real-to-complex)
   'done)
 
 (define (raise x) (apply-generic 'raise x))
@@ -201,7 +186,6 @@
 (install-real-package)
 (install-complex-package)
 (install-raise-package)
-
 
 (add (make-integer 1) (add (make-rational 1 4) (add (make-real 2.5) (make-complex-from-real-imag 1 2))))
 (add (make-integer 1) (add (make-rational 1 4) (make-real 2.5)))

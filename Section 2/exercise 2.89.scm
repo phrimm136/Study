@@ -18,7 +18,7 @@
 ; get/put
 
 
-(define (square x) (* x x))
+(define pi 3.1415)
 (define (attach-tag type-tag contents) (cons type-tag contents))
 (define (type-tag datum)
   (if (pair? datum) (car datum) (error "Bad tagged datum -- TYPE-TAG" datum)))
@@ -55,6 +55,8 @@
   (put 'mul '(integer integer) (lambda (x y) (tag (* x y))))
   (put 'div '(integer integer) (lambda (x y) (tag (/ x y))))
   (put 'equ '(integer integer) (lambda (x y) (= x y)))
+  (put 'zero '(integer) (lambda (x) (= x 0)))
+  (put 'neg '(integer) (lambda (x) (make-integer (- x))))
   (put 'make 'integer (lambda (x) (tag x)))
   'done)
 
@@ -82,6 +84,8 @@
   (put 'mul '(rational rational) (lambda (x y) (tag (mul-rat x y))))
   (put 'div '(rational rational) (lambda (x y) (tag (div-rat x y))))
   (put 'equ '(rational rational) (lambda (x y) (equ-rat x y)))
+  (put 'zero '(rational) (lambda (x) (if (= (denom x) 0) (error "zero division" x) (= (numer x) 0))))
+  (put 'neg '(rational) (lambda (x) (make-rational (- (numer x)) (denom x))))
   (put 'make 'rational (lambda (n d) (tag (make-rat n d))))
   'done)
 
@@ -97,6 +101,8 @@
   (put 'mul '(real real) (lambda (x y) (tag (* x y))))
   (put 'div '(real real) (lambda (x y) (tag (/ x y))))
   (put 'equ '(real real) (lambda (x y) (= x y)))
+  (put 'zero '(real) (lambda (x) (= x 0)))
+  (put 'neg '(real) (lambda (x) (make-real (- x))))
   (put 'make 'real (lambda (x) (tag x)))
   'done)
 
@@ -104,13 +110,39 @@
 
 
 (define (install-complex-package)
+  (define (square x) (apply-generic 'square x))
+  (put 'square '(integer) (lambda (x) (make-integer (* x x))))
+  (put 'square '(rational) (lambda (x) (make-real (expt (/ (numer x) (denom x)) 2))))
+  (put 'square '(real) (lambda (x) (make-real (* x x))))
+  
+  (define (sqrt x) (apply-generic 'sqrt x))
+  (put 'sqrt '(integer) (lambda (x) (make-real (expt x 0.5))))
+  (put 'sqrt '(rational) (lambda (x) (make-real (expt (/ (numer x) (denom x)) 0.5))))
+  ; hard to express square root of rational number
+  (put 'sqrt '(real) (lambda (x) (make-real (expt x 0.5))))
+  
+  (define (sine x) (apply-generic 'sin x))
+  (put 'sin '(integer) (lambda (x) (make-real (sin x))))
+  (put 'sin '(rational) (lambda (x) (make-real (sin (/ (numer x) (denom x))))))
+  (put 'sin '(real) (lambda (x) (make-real (sin x))))
+
+  (define (cosine x) (apply-generic 'cos x))
+  (put 'cos '(integer) (lambda (x) (make-real (cos x))))
+  (put 'cos '(rational) (lambda (x) (make-real (cos (/ (numer x) (denom x))))))
+  (put 'cos '(real) (lambda (x) (make-real (cos x))))
+
+  (define (arctan x) (apply-generic 'atan x))
+  (put 'atan '(integer) (lambda (x) (make-real (atan x))))
+  (put 'atan '(rational) (lambda (x) (make-real (atan (/ (numer x) (denom x))))))
+  (put 'atan '(real) (lambda (x) (make-real (atan x))))
+  
   (define (install-rectangular-package)
     (define (real-part z) (car z))
     (define (imag-part z) (cdr z))
     (define (make-from-real-imag x y) (cons x y))
-    (define (magnitude z) (sqrt (+ (square (real-part z)) (square (imag-part z)))))
-    (define (angle z) (atan (imag-part z) (real-part z)))
-    (define (make-from-mag-ang r a) (cons (* r (cos a)) (* r (sin a))))
+    (define (magnitude z) (sqrt (add (square (real-part z)) (square (imag-part z)))))
+    (define (angle z) (arctan (div (imag-part z) (real-part z))))
+    (define (make-from-mag-ang r a) (cons (mul r (cosine a)) (mul r (sine a))))
 
     (define (tag x) (attach-tag 'rectangular x))
     (put 'real-part '(rectangular) real-part)
@@ -125,9 +157,9 @@
     (define (magnitude z) (car z))
     (define (angle z) (cdr z))
     (define (make-from-mag-ang r a) (cons r a))
-    (define (real-part z) (* (magnitude z) (cos (angle z))))
-    (define (imag-part z) (* (magnitude z) (sin (angle z))))
-    (define (make-from-real-imag x y) (cons (sqrt (+ (square x) (square y))) (atan y x)))
+    (define (real-part z) (mul (magnitude z) (cosine (angle z))))
+    (define (imag-part z) (mul (magnitude z) (sine (angle z))))
+    (define (make-from-real-imag x y) (cons (sqrt (add (square x) (square y))) (arctan y x)))
 
     (define (tag x) (attach-tag 'polar x))
     (put 'real-part '(polar) real-part)
@@ -140,7 +172,7 @@
 
   (install-rectangular-package)
   (install-polar-package)
-
+  
   (define (real-part z) (apply-generic 'real-part z))
   (define (imag-part z) (apply-generic 'imag-part z))
   (define (magnitude z) (apply-generic 'magnitude z))
@@ -149,15 +181,18 @@
   (define (make-from-mag-ang r a) ((get 'make-from-mag-ang 'polar) r a))
 
   (define (add-complex z1 z2)
-    (make-from-real-imag (+ (real-part z1) (real-part z2)) (+ (imag-part z1) (imag-part z2))))
+    (make-from-real-imag (add (real-part z1) (real-part z2)) (add (imag-part z1) (imag-part z2))))
   (define (sub-complex z1 z2)
-    (make-from-real-imag (- (real-part z1) (real-part z2)) (- (imag-part z1) (imag-part z2))))
+    (make-from-real-imag (add (real-part z1) (real-part z2)) (add (imag-part z1) (imag-part z2))))
   (define (mul-complex z1 z2)
-    (make-from-mag-ang (* (magnitude z1) (magnitude z2)) (+ (angle z1) (angle z2))))
+    (make-from-mag-ang (mul (magnitude z1) (magnitude z2)) (add (angle z1) (angle z2))))
   (define (div-complex z1 z2)
-    (make-from-mag-ang (/ (magnitude z1) (magnitude z2)) (- (angle z1) (angle z2))))
+    (make-from-mag-ang (div (magnitude z1) (magnitude z2)) (sub (angle z1) (angle z2))))
   (define (equ-complex z1 z2)
-    (and (= (real-part z1) (real-part z2)) (= (imag-part z1) (imag-part z2))))
+    (and (and (eq? (type-tag (real-part z1)) (type-tag (real-part z2)))
+              (eq? (type-tag (imag-part z1)) (type-tag (imag-part z2))))
+         (and (= (contents (real-part z1)) (contents (real-part z2)))
+              (= (contents (imag-part z1)) (contents (imag-part z2))))))
 
   (define (tag z) (attach-tag 'complex z))
   (put 'real-part '(complex) real-part)
@@ -169,6 +204,12 @@
   (put 'mul '(complex complex) (lambda (z1 z2) (tag (mul-complex z1 z2))))
   (put 'div '(complex complex) (lambda (z1 z2) (tag (div-complex z1 z2))))
   (put 'equ '(complex complex) (lambda (z1 z2) (equ-complex z1 z2)))
+  (put 'zero '(complex) (lambda (z) (cond ((eq? 'rectangular (type-tag z)) (and (= (real-part z) 0)
+                                                                                (= (imag-part z) 0)))
+                                          ((eq? 'polar (type-tag z)) (= (magnitude z) 0)))))
+  (put 'neg '(complex) (lambda (z) (if (eq? 'rectangular (type-tag z))
+                                       (make-complex-from-real-imag (- (real-part z)) (- (imag-part z)))
+                                       (make-complex-from-mag-ang (magnitude z) (+ (* 2 pi) (angle z))))))
   (put 'make-from-real-imag 'complex (lambda (x y) (tag (make-from-real-imag x y))))
   (put 'make-from-mag-ang 'complex (lambda (r a) (tag (make-from-mag-ang r a))))
   'done)
@@ -184,7 +225,7 @@
 (define (install-raise-package)
   (define (raise-integer-to-rational n) (make-rational n 1))
   (define (raise-rational-to-real x) (make-real (/ (car x) (cdr x))))
-  (define (raise-real-to-complex x) (make-complex-from-real-imag x 0))
+  (define (raise-real-to-complex x) (make-complex-from-real-imag x (make-integer 0)))
 
   (put 'raise '(integer) raise-integer-to-rational)
   (put 'raise '(rational) raise-rational-to-real)
@@ -196,7 +237,7 @@
 
 (define (drop x)
   (let ((dropped (project x)))
-    (cond ((eq? (type-tag x) 'integer) x)
+    (cond ((or (eq? (type-tag x) 'polynomial) (eq? (type-tag x) 'integer)) x)
           ((equ? x (raise dropped)) (drop dropped))
           (else x))))
 
@@ -206,6 +247,7 @@
   (define (project-real x) (make-rational (round x) 1))
   (define (project-rational x) (make-integer (quotient (numer x) (denom x))))
 
+  (put 'project '(polynomial) (lambda (x) x))
   (put 'project '(complex) project-complex)
   (put 'project '(real) project-real)
   (put 'project '(rational) project-rational)
@@ -215,11 +257,84 @@
 (define (project x) (apply-generic 'project x))
 
 
+(define (install-polynomial-package)
+  (define (variable p) (car p))
+  (define (term-list p) (cdr p))
+  (define (variable? x) (symbol? x))
+  (define (same-variable? v1 v2) (and (variable? v1) (variable? v2) (eq? v1 v2)))
+
+  (define (adjoin-term term term-list order)
+    (cond ((=zero? (coeff term))  term-list)
+          ((= order (length term-list)) (cons (coeff term) term-list))
+          (else (adjoin-term term (cons (make-integer 0) term-list) order))))
+  (define (the-empty-termlist) '())
+  (define (first-term term-list) (car term-list))
+  (define (rest-terms term-list) (cdr term-list))
+  (define (empty-termlist? term-list) (null? term-list))
+  (define (make-term order coeff) coeff)
+  (define (order term-list) (- (length term-list) 1))
+  (define (coeff term) term)
+
+  (define (add-terms L1 L2)
+    (cond ((empty-termlist? L1) L2)
+          ((empty-termlist? L2) L1)
+          (else
+           (let ((t1 (first-term L1)) (t2 (first-term L2)) (o1 (order L1)) (o2 (order L2)))
+             (cond ((> o1 o2) (adjoin-term t1 (add-terms (rest-terms L1) L2) o1))
+                   ((< o1 o2) (adjoin-term t2 (add-terms L1 (rest-terms L2)) o2))
+                   (else (adjoin-term (add t1 t2)
+                                      (add-terms (rest-terms L1) (rest-terms L2))
+                                      o1)))))))
+  (define (mul-terms L1 L2)
+    (if (empty-termlist? L1)
+        (the-empty-termlist)
+        (add-terms (mul-term-by-all-terms (first-term L1) L2 (order L1) (order L2))
+                   (mul-terms (rest-terms L1) L2))))
+  (define (mul-term-by-all-terms t1 L o1 o2)
+    (if (empty-termlist? L)
+        (the-empty-termlist)
+        (let ((t2 (first-term L)))
+          (adjoin-term (make-term (+ o1 o2) (mul (coeff t1) (coeff t2)))
+                       (mul-term-by-all-terms t1 (rest-terms L) o1 (- o2 1))
+                       (+ o1 o2)))))
+  (define (neg-term L)
+    (if (empty-termlist? L)
+        (the-empty-termlist)
+        (adjoin-term (negate (first-term L))
+                     (neg-term (rest-terms L))
+                     (order L))))
+  
+  (define (add-poly p1 p2)
+    (if (same-variable? (variable p1) (variable p2))
+        (make-poly (variable p1) (add-terms (term-list p1) (term-list p2)))
+        (error "Polys not in same var -- ADD-POLY" (list p1 p2))))
+  (define (mul-poly p1 p2)
+    (if (same-variable? (variable p1) (variable p2))
+        (make-poly (variable p1) (mul-terms (term-list p1) (term-list p2)))
+        (error "Polys not in same var -- MUL-POLY" (list p1 p2))))
+  (define (neg-poly p)
+    (make-poly (variable p) (neg-term (term-list p))))
+  (define (make-poly variable term-list) (cons variable term-list))
+
+  (define (tag p) (attach-tag 'polynomial p))
+  (put 'add '(polynomial polynomial) (lambda (p1 p2) (tag (add-poly p1 p2))))
+  (put 'sub '(polynomial polynomial) (lambda (p1 p2) (tag (add-poly p1 (negate (tag p2))))))
+  (put 'mul '(polynomial polynomial) (lambda (p1 p2) (tag (mul-poly p1 p2))))
+  (put 'zero '(polynomial) (lambda (p) (empty-termlist? (term-list p))))
+  (put 'neg '(polynomial) (lambda (p) (tag (neg-poly p))))
+  (put 'make 'polynomial (lambda (var terms) (tag (make-poly var terms))))
+  'done)
+
+(define (make-polynomial var terms) ((get 'make 'polynomial) var terms))
+
+
 (define (add x y) (apply-generic 'add x y))
 (define (sub x y) (apply-generic 'sub x y))
 (define (mul x y) (apply-generic 'mul x y))
 (define (div x y) (apply-generic 'div x y))
 (define (equ? x y) (apply-generic 'equ x y))
+(define (=zero? x) (apply-generic 'zero x))
+(define (negate x) (apply-generic 'neg x))
 
 
 (install-integer-package)
@@ -228,8 +343,14 @@
 (install-complex-package)
 (install-raise-package)
 (install-projection-package)
+(install-polynomial-package)
 
-(drop (make-complex-from-real-imag 1 0))
-(add (make-complex-from-real-imag 1 0) (make-complex-from-real-imag 3 0))
-(add (make-real 1.5) (make-real 0.5))
-(add (make-rational 3 4) (make-rational 1 4))
+(define p (make-polynomial 'x (list (make-integer 1) (make-integer 2) (make-integer 1))))
+(make-polynomial 'x (list (make-real 0)
+                          (make-rational 0 4)
+                          (make-integer 0)
+                          (make-complex-from-real-imag (make-integer 0) (make-integer 0))))
+
+(add p p)
+(sub p p)
+(mul p p)
