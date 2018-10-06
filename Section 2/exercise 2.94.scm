@@ -312,8 +312,11 @@
           (if (> (order t2) (order t1))
               (list (the-empty-termlist) L1)
               (let ((new-c (div (coeff t1) (coeff t2))) (new-o (- (order t1) (order t2))))
-                (let ((rest-of-result (add-terms L1 (neg-term (mul-terms (list (make-term new-o new-c)) L2)))))
-                  (adjoin-term (make-term new-o new-c) (div-terms rest-of-result L2))))))))
+                (let ((rest-of-result (div-terms (add-terms L1
+                                                            (neg-term (mul-terms (list (make-term new-o new-c))
+                                                                                 L2)))
+                                                 L2)))
+                  (list (adjoin-term (make-term new-o new-c) (car rest-of-result)) (cadr rest-of-result))))))))
   (define (neg-term L)
     (if (empty-termlist? L)
         (the-empty-termlist)
@@ -330,7 +333,7 @@
         a
         (gcd-terms b (remainder-terms a b))))
   (define (remainder-terms a b)
-    (caddr (div-terms a b)))
+    (cadr (div-terms a b)))
   
   (define (add-poly p1 p2)
     (if (same-variable? (variable p1) (variable p2))
@@ -356,7 +359,7 @@
         (error "Polys not in same var -- EQU-POLY?" (list p1 p2))))
   (define (gcd-poly a b)
     (if (same-variable? (variable a) (variable b))
-        (gcd-terms (term-list a) (term-list b))
+        (make-poly (variable a) (gcd-terms (term-list a) (term-list b)))
         (error "Polys not in same var -- GCD-POLY" (list p1 p2))))
   (define (make-poly variable term-list) (cons variable term-list))
 
@@ -398,5 +401,5 @@
 (define rf (make-rational p2 p1))
 
 (greatest-common-divisor p2 p1)
-(greatest-common-divisor p1 p1)
+(greatest-common-divisor p2 p2)
 (greatest-common-divisor 204 40)
