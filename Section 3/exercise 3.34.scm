@@ -127,4 +127,4 @@
 (forget-value! sqrt 'user)
 (set-value! sqr 9 'user)
 
-; It can't evaluate square root. Is it posible for computer to evaluate 9/a=a?
+; It can't evaluate square root. Two connectors (a) don't have value, so multiplier doesn't work.

@@ -20,7 +20,7 @@
         (begin (full-adder (car a-list) (car b-list) c-in (car s-list) c-out)
                (iter (cdr a-list) (cdr b-list) c-in (cdr s-list) c-out))
         (set! c-out 0)))
-  (iter a-list b-list c s-list c)
+  (iter a-list b-list c s-list (make-wire))
   'ok)
 
 ; delay of ripple-carry adder: n * (2 * (max delay of add-gate and or-gate) + 2 * delay of add-gate
