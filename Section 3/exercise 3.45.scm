@@ -34,6 +34,7 @@
 
 
 (parallel-excution (serialized-exchange acc1 acc2) (serialized-exchange acc1 acc3))
+
 ; The withdraw procedure and deposit procedure will be queueed in serializer,
-; and then will wait by serialized-exchange procedure is completed,
+; and then they will wait until serialized-exchange procedure is completed,
 ; but serialized-exchange should finish the withdraw prcedure and deposit procedure, so it won't be completed.
