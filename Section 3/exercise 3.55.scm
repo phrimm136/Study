@@ -36,15 +36,17 @@
                                                  (stream-filter pred (stream-cdr stream))))
         (else (stream-filter pred (stream-cdr stream)))))
 
+(define (integers-starting-from n)
+  (cons-stream n (integers-starting-from (+ n 1))))
+(define integers (integers-starting-from 1))
 
-(define (show x)
-  (display-line x)
-  x)
+(define (add-streams s1 s2)
+  (stream-map + s1 s2))
+
+(define (scale-stream stream factor)
+  (stream-map (lambda (x) (* x factor)) stream))
 
 
-(define x (stream-map show (stream-enumerate-interval 0 10)))
-(stream-ref x 5) ; displays 0 1 2 3 4 5 and returns 5
-(stream-ref x 7) ; displays 6 7 and returns 7
-
-; Streams are memoized in (stream-ref x 5).
-; In (stream-ref x 7), the force procedure only returns memoized value, so the show procedure isn't applied.
+(define (partial-sums stream)
+  (add-streams stream (cons-stream 0 (partial-sums stream))))
+; 1 3 6 10 ...

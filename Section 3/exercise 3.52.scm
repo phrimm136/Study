@@ -1,5 +1,4 @@
 #lang sicp
-(define (cons-stream a b) (cons a (delay b)))
 (define (stream-car stream) (car stream))
 (define (stream-cdr stream) (force (cdr stream)))
 
@@ -47,6 +46,6 @@
 (define z (stream-filter (lambda (x) (= (remainder x 5) 0)) seq)) ; sum = 6 + 4 = 10
 (stream-ref y 7) ; sum = 10 + sigma 5 to 16 = 136 -> 136
 (display-stream z)
-; 10 15 45 55 105 120 190 210
+; 10 15
 
 ; If there is no memoizing, duplicate values will be added to sum. 
