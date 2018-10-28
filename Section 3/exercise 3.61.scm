@@ -17,7 +17,7 @@
   (if (stream-null? s)
       'done
       (begin (proc (stream-car s))
-             (stream-map proc (stream-cdr s)))))
+             (stream-for-each proc (stream-cdr s)))))
 
 (define (display-stream s)
   (stream-for-each display-line s))

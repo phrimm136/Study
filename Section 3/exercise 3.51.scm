@@ -17,7 +17,7 @@
   (if (stream-null? s)
       'done
       (begin (proc (stream-car s))
-             (stream-map proc (stream-cdr s)))))
+             (stream-for-each proc (stream-cdr s)))))
 
 (define (display-stream s)
   (stream-for-each display-line s))
@@ -46,5 +46,5 @@
 (stream-ref x 5) ; displays 0 1 2 3 4 5 and returns 5
 (stream-ref x 7) ; displays 6 7 and returns 7
 
-; Streams are memoized in (stream-ref x 5).
+; Streams are memoized by (stream-ref x 5).
 ; In (stream-ref x 7), the force procedure only returns memoized value, so the show procedure isn't applied.

@@ -36,6 +36,8 @@
                                                  (stream-filter pred (stream-cdr stream))))
         (else (stream-filter pred (stream-cdr stream)))))
 
+
+(define (divisible? x y) (= (remainder x y) 0))
 (define (integers-starting-from n)
   (cons-stream n (integers-starting-from (+ n 1))))
 (define integers (integers-starting-from 1))
@@ -47,13 +49,21 @@
   (stream-map (lambda (x) (* x factor)) stream))
 
 
-(define fibs
-  (cons-stream 0
-               (cons-stream 1
-                            (add-streams (stream-cdr fibs)
-                                         fibs))))
+(define (average x y)
+  (/ (+ x y) 2))
 
-(display-stream fibs)
-; Without memoization: 0 0 1 2 4 7 12 20 ... -> number_of_addition(n) = fib(n) + number_of_addtion(n-1)
-;                      0 0 1 1 2 3 5  8  ...  = fib(n) + fib(n-1) + number_of_addtion(n-2)
-;                      0 0 0 1 2 4 7  12 ...  = φ^(n+1) + α -> exponential
+(define (sqrt-improve guess x)
+  (average guess (/ x guess)))
+; (define (sqrt-stream x)
+;   (define guesses
+;     (cons-stream 1.0
+;                  (stream-map (lambda (guess) (sqrt-improve guess x)) guesses)))
+;   guesses)
+(define (sqrt-stream x)
+  (cons-stream 1.0
+               (stream-map (lambda (guess) (sqrt-improve guess x))
+                           (sqrt-stream x))))
+(display-stream (sqrt-stream 2))
+
+; Louis' version re-produce the produced stream to compute next terms.
+; If there is no memoizing, Earlier version also have to re-produce stream, so there is no difference.

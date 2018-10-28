@@ -21,10 +21,10 @@
 
 (define (display-stream s)
   (stream-for-each display-line s))
+
 (define (display-line x)
   (newline)
   (display x))
-
 (define (stream-enumerate-interval low high)
   (if (> low high)
       the-empty-stream
@@ -36,6 +36,8 @@
                                                  (stream-filter pred (stream-cdr stream))))
         (else (stream-filter pred (stream-cdr stream)))))
 
+
+(define (divisible? x y) (= (remainder x y) 0))
 (define (integers-starting-from n)
   (cons-stream n (integers-starting-from (+ n 1))))
 (define integers (integers-starting-from 1))
@@ -46,14 +48,24 @@
 (define (scale-stream stream factor)
   (stream-map (lambda (x) (* x factor)) stream))
 
+(define (interleave s1 s2)
+  (if (stream-null? s1)
+      s2
+      (cons-stream (stream-car s1)
+                   (interleave s2 (stream-cdr s1)))))
 
-(define fibs
-  (cons-stream 0
-               (cons-stream 1
-                            (add-streams (stream-cdr fibs)
-                                         fibs))))
+; (define (pairs s t)
+;   (cons-stream (list (stream-car s) (stream-car t))
+;                (interleave (stream-map (lambda (x) (list (stream-car s) x))
+;                                        (stream-cdr t))
+;                            (pairs (stream-cdr s) (stream-cdr t)))))
+(define (pairs s t)
+  (interleave (stream-map (lambda (x) (list (stream-car s) x))
+                          t)
+              (pairs (stream-cdr s) (stream-cdr t))))
 
-(display-stream fibs)
-; Without memoization: 0 0 1 2 4 7 12 20 ... -> number_of_addition(n) = fib(n) + number_of_addtion(n-1)
-;                      0 0 1 1 2 3 5  8  ...  = fib(n) + fib(n-1) + number_of_addtion(n-2)
-;                      0 0 0 1 2 4 7  12 ...  = φ^(n+1) + α -> exponential
+(display-stream (pairs integers integers)) ; It doesn't work.
+
+; When we evaluate pairs, the second argument of interleave is needed to be evaluated,
+; which invokes pairs again, and the second argument of another interleave is needed, over and over...
+; So it loops forever.

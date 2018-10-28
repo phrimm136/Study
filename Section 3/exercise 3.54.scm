@@ -17,7 +17,7 @@
   (if (stream-null? s)
       'done
       (begin (proc (stream-car s))
-             (stream-map proc (stream-cdr s)))))
+             (stream-for-each proc (stream-cdr s)))))
 
 (define (display-stream s)
   (stream-for-each display-line s))
@@ -51,4 +51,5 @@
   (stream-map * s1 s2))
 
 (define factorials (cons-stream 1 (mul-streams factorials (stream-cdr integers))))
-; 1 2 6 24 ...
+
+(display-stream factorials) ; 1 2 6 24 120 720 ...

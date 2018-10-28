@@ -17,7 +17,7 @@
   (if (stream-null? s)
       'done
       (begin (proc (stream-car s))
-             (stream-map proc (stream-cdr s)))))
+             (stream-for-each proc (stream-cdr s)))))
 
 (define (display-stream s)
   (stream-for-each display-line s))
@@ -58,4 +58,5 @@
 
 (define S (cons-stream 1 (merge (merge (scale-stream integers 2) (scale-stream integers 3))
                                 (scale-stream integers 5))))
-; 1 2 3 4 5 6 8 9 10 12 ...
+
+(display-stream S) ; 1 2 3 4 5 6 8 9 10 12 14 15 16 18...

@@ -17,7 +17,7 @@
   (if (stream-null? s)
       'done
       (begin (proc (stream-car s))
-             (stream-map proc (stream-cdr s)))))
+             (stream-for-each proc (stream-cdr s)))))
 
 (define (display-stream s)
   (stream-for-each display-line s))
@@ -49,4 +49,5 @@
 
 (define (partial-sums stream)
   (add-streams stream (cons-stream 0 (partial-sums stream))))
-; 1 3 6 10 ...
+
+(display-stream (partial-sums integers)) ; 1 3 6 10 15 21 28...

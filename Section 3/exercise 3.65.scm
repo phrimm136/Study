@@ -21,10 +21,10 @@
 
 (define (display-stream s)
   (stream-for-each display-line s))
+
 (define (display-line x)
   (newline)
   (display x))
-
 (define (stream-enumerate-interval low high)
   (if (> low high)
       the-empty-stream
@@ -36,6 +36,8 @@
                                                  (stream-filter pred (stream-cdr stream))))
         (else (stream-filter pred (stream-cdr stream)))))
 
+
+(define (divisible? x y) (= (remainder x y) 0))
 (define (integers-starting-from n)
   (cons-stream n (integers-starting-from (+ n 1))))
 (define integers (integers-starting-from 1))
@@ -47,13 +49,13 @@
   (stream-map (lambda (x) (* x factor)) stream))
 
 
-(define fibs
-  (cons-stream 0
-               (cons-stream 1
-                            (add-streams (stream-cdr fibs)
-                                         fibs))))
+(define (partial-sums stream)
+  (add-streams stream (cons-stream 0 (partial-sums stream))))
+(define (ln2-summands n)
+  (cons-stream (/ 1.0 n)
+               (stream-map - (ln2-summands (+ n 1)))))
+(define ln2
+  (partial-sums (ln2-summands 1)))
 
-(display-stream fibs)
-; Without memoization: 0 0 1 2 4 7 12 20 ... -> number_of_addition(n) = fib(n) + number_of_addtion(n-1)
-;                      0 0 1 1 2 3 5  8  ...  = fib(n) + fib(n-1) + number_of_addtion(n-2)
-;                      0 0 0 1 2 4 7  12 ...  = φ^(n+1) + α -> exponential
+(display-stream ln2)
+; After 3400 computation, ln2 bounds from .69300 to .69329

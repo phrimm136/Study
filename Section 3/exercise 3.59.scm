@@ -17,7 +17,7 @@
   (if (stream-null? s)
       'done
       (begin (proc (stream-car s))
-             (stream-map proc (stream-cdr s)))))
+             (stream-for-each proc (stream-cdr s)))))
 
 (define (display-stream s)
   (stream-for-each display-line s))
@@ -52,12 +52,15 @@
 
 (define exp-series
   (cons-stream 1 (integrate-series exp-series)))
-; 1 1 1/2 1/6 1/24 1/120 ...
+
+(display-stream exp-series) ; 1 1 1/2 1/6 1/24 1/120 ...
 
 (define cosine-series
   (cons-stream 1 (integrate-series (scale-stream sine-series -1))))
-; 1 0 -1/2 0 1/24 0 ...
 
 (define sine-series
   (cons-stream 0 (integrate-series cosine-series)))
-; 0 1 0 -1/6 0 1/120 ...
+
+(display-stream cosine-series) ; 1 0 -1/2 0 1/24 0 1/720...
+
+(display-stream sine-series)   ; 0 1 0 -1/6 0 1/120 0 ...

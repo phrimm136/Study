@@ -17,7 +17,7 @@
   (if (stream-null? s)
       'done
       (begin (proc (stream-car s))
-             (stream-map proc (stream-cdr s)))))
+             (stream-for-each proc (stream-cdr s)))))
 
 (define (display-stream s)
   (stream-for-each display-line s))
@@ -67,4 +67,5 @@
 
 (define unit-circle
   (add-streams (mul-series sine-series sine-series) (mul-series cosine-series cosine-series)))
-; 1 0 0 0 ...
+
+(display-stream unit-circle) ; 1 0 0 0 0 0 ...

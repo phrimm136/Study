@@ -17,7 +17,7 @@
   (if (stream-null? s)
       'done
       (begin (proc (stream-car s))
-             (stream-map proc (stream-cdr s)))))
+             (stream-for-each proc (stream-cdr s)))))
 
 (define (display-stream s)
   (stream-for-each display-line s))
@@ -51,7 +51,7 @@
   (cons-stream (quotient (* num radix) den)
                (expand (remainder (* num radix) den) den radix)))
 
-(expand 1 7 10) ; 1 4 2 8 5 7 1 4 2 ...
-(expand 3 8 10) ; 3 7 5 0 0 ...
+(display-stream (expand 1 7 10)) ; 1 4 2 8 5 7 1 4 2 ...
+(display-stream (expand 3 8 10)) ; 3 7 5 0 0 ...
 
 ; The result represents (/ num den) (radix as base)

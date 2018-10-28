@@ -17,7 +17,7 @@
   (if (stream-null? s)
       'done
       (begin (proc (stream-car s))
-             (stream-map proc (stream-cdr s)))))
+             (stream-for-each proc (stream-cdr s)))))
 
 (define (display-stream s)
   (stream-for-each display-line s))
@@ -77,4 +77,5 @@
 
 (define tangent-series
   (div-series sine-series cosine-series))
-; 0 1 0 1/3 0 2/15 ...
+
+(display-stream tangent-series) ; 0 1 0 1/3 0 2/15 0 17/315 ...
