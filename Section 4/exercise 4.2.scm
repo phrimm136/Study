@@ -1,6 +1,6 @@
 #lang sicp
-(define (eval exp env)
-  (cond ((application? exp) (apply (eval (operator exp) env) (list-of-values (operands exp) env)))
+(define (evaln exp env)
+  (cond ((application? exp) (apply (evaln (operator exp) env) (list-of-values (operands exp) env)))
         ((self-evaluating? exp) exp)
         ((variable? exp) (lookup-variable-value exp env))
         ((quoted? exp) (text-of-quotation exp))
@@ -9,7 +9,7 @@
         ((if? exp) (eval-if exp env))
         ((lambda? exp) (make-procedure (lambda-parameters exp) (lambda-body exp) env))
         ((begin? exp) (eval-sequence (begin-actions exp) env))
-        ((cond? exp) (eval (cond->if exp) env))
+        ((cond? exp) (evaln (cond->if exp) env))
         (else (error "Unknown expression type -- EVAL" exp))))
 
 ; Let application have first order.
@@ -18,7 +18,7 @@
 
 
 ; In eval,
-((application? exp) (apply (apply-operator exp) env) (list-of-values (apply-operands exp) env)))
+((application? exp) (applyn (apply-operator exp) env) (list-of-values (apply-operands exp) env)))
 
 (define (application? exp)
   (tagged-list? exp 'call))

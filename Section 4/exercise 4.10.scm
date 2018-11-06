@@ -1,5 +1,5 @@
 #lang sicp
-(define (eval exp env)
+(define (evaln exp env)
   (cond ((self-evaluating? exp) exp)
         ((variable? exp) (lookup-variable-value exp env))
         ((quoted? exp) (text-of-quotation exp))
@@ -8,14 +8,14 @@
         ((if? exp) (eval-if exp env))
         ((lambda? exp) (make-procedure (lambda-parameters exp) (lambda-body exp) env))
         ((begin? exp) (eval-sequence (begin-actions exp) env))
-        ((cond? exp) (eval (cond->if exp) env))
-        ((let? exp) (eval (let->combination exp) env))
-        ((let*? exp) (eval (let*->nested-lets exp) env)) ; enough.
-        ((do? exp) (eval (do->combination exp) env))
-        ((for? exp) (eval (for->combination exp) env))
-        ((while? exp) (eval (while->combination exp) env))
-        ((until? exp) (eval (until-combination exp) env))
-        ((application? exp) (apply (eval (operator exp) env) (list-of-values (operands exp) env)))
+        ((cond? exp) (evaln (cond->if exp) env))
+        ((let? exp) (evaln (let->combination exp) env))
+        ((let*? exp) (evaln (let*->nested-lets exp) env)) ; enough.
+        ((do? exp) (evaln (do->combination exp) env))
+        ((for? exp) (evaln (for->combination exp) env))
+        ((while? exp) (evaln (while->combination exp) env))
+        ((until? exp) (evaln (until-combination exp) env))
+        ((application? exp) (apply (evaln (operator exp) env) (list-of-values (operands exp) env)))
         (else (error "Unknown expression type -- EVAL" exp))))
 
 (define (begin? exp)

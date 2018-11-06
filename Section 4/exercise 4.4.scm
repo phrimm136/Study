@@ -31,7 +31,7 @@
 
 (define (and->if exp)
   (expand-and-clauses (and-clauses exp)))
-(define (expand-and-caluses exp)
+(define (expand-and-clauses exp)
   (let ((first (first-exp exp))
         (rest (rest-exps exp)))
     (cond ((null-exp? exp) false)
