@@ -189,13 +189,13 @@
   (tagged-list? exp 'or))
 
 (define (eval-or exp env)
-    (if (null-exp? exp)
-        false
-        (let ((first (first-exp exp))
-              (rest (rest-exps exp)))
-          (cond ((last-exp? exp) first)
-                (first true)
-                (else (eval-or rest env))))))
+  (if (null-exp? exp)
+      false
+      (let ((first (first-exp exp))
+            (rest (rest-exps exp)))
+        (cond ((last-exp? exp) first)
+              (first true)
+              (else (eval-or rest env))))))
 
 (define (and->if exp)
   (expand-and-clauses (and-clauses exp)))
@@ -223,19 +223,9 @@
   (tagged-list? exp 'let))
 
 (define (let-variables clauses)
-  (define (iter bindings)
-    (if (null? bindings)
-      nil
-      (cons (caar bindings)
-            (let-variables (cdr bindings)))))
-  (iter (car clauses)))
+  (map car (car clauses)))
 (define (let-expressions clauses)
-  (define (iter bindings)
-    (if (null? bindings)
-      nil
-      (cons (cadar bindings)
-            (let-variables (cdr bindings)))))
-  (iter (car clauses)))
+  (map cadr (car clauses)))
 (define (let-body clauses) (cdr clauses))
 
 (define (named-let? exp) (and (let? exp) (symbol? (cadr exp))))
@@ -285,7 +275,7 @@
     (if (let*-null? clauses)
         (sequence->exp (let*-body exp))
         (list 'let (list (let*-expression clauses)) (iter (let*-rest-expressions clauses)))))
-    (iter (cadr exp)))
+  (iter (cadr exp)))
 
 
 (define (true? x)
@@ -331,7 +321,7 @@
 (define (procedure-environment p) (cadddr p))
 
 (define (make-procedure parameters body env)
-  (list 'procedure parameters body env))
+  (list 'procedure parameters (scan-out-defines body) env))
 
 
 (define (enclosing-environment env) (cdr env))
@@ -349,6 +339,7 @@
   (define (env-loop env)
     (define (scan vars vals)
       (cond ((null? vars) (env-loop (enclosing-environment env)))
+            ((eq? (car vals) '*unassigned*) (error "Variable is not yet assigned" (car vars)))
             ((eq? var (car vars)) (car vals))
             (else (scan (cdr vars) (cdr vals)))))
     (if (eq? env the-empty-environment)
@@ -357,6 +348,7 @@
           (scan (frame-variables frame)
                 (frame-values frame)))))
   (env-loop env))
+
 (define (extend-environment vars vals base-env)
   (if (= (length vars) (length vals))
       (cons (make-frame vars vals) base-env)
@@ -415,3 +407,43 @@
       (display object)))
 
 
+(define (scan-out-defines proc)
+  (let ((body-list proc))
+    (define (internal-definition-variable body-list)
+      (let ((body (car body-list))
+            (rest (cdr body-list)))
+        (cond ((eq? body-list nil) nil)
+              ((definition? body) (cons (definition-variable body)
+                                        (internal-definition-variable rest)))
+              (else nil))))
+    (define (internal-definition-value body-list)
+      (let ((body (car body-list))
+            (rest (cdr body-list)))
+        (cond ((eq? body-list nil) nil)
+              ((definition? body) (cons (definition-value body)
+                                        (internal-definition-value rest)))
+              (else nil))))
+    (define (initial-variables variables)
+      (if (null? variables)
+          nil
+          (cons (list (car variables) '*unassigned*)
+                (initial-variables (cdr variables)))))
+    (define (set-variables! variables values)
+      (if (null? variables)
+          nil
+          (cons (list 'set! (car variables) (car values))
+                (set-variables! (cdr variables) (cdr values)))))
+    (define (true-body body-list)
+      (cond ((null? body-list) body-list)
+            ((definition? (car body-list)) (true-body (cdr body-list)))
+            (else body-list)))
+    (let ((variables (internal-definition-variable body-list)))
+      (if (null? variables)
+          body-list
+          (list (list 'let
+                      (initial-variables variables)
+                      (make-begin (append (set-variables! (internal-definition-variable body-list)
+                                                          (internal-definition-value body-list))
+                                          (true-body body-list)))))))))
+
+(driver-loop)

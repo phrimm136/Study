@@ -17,19 +17,9 @@
   (tagged-list? exp 'let))
 
 (define (let-variables clauses)
-  (define (iter bindings)
-    (if (null? bindings)
-      nil
-      (cons (caar bindings)
-            (let-variables (cdr bindings)))))
-  (iter (car clauses)))
+  (map car (car clauses)))
 (define (let-expressions clauses)
-  (define (iter bindings)
-    (if (null? bindings)
-      nil
-      (cons (cadar bindings)
-            (let-variables (cdr bindings)))))
-  (iter (car clauses)))
+  (map cadr (car clauses)))
 (define (let-body clauses) (cdr clauses))
 (define (let->combination exp)
   (let ((clauses (cdr exp)))
