@@ -14,6 +14,7 @@
         ((or? exp) (eval-or exp env))
         ((let? exp) (evaln (let->combination exp) env))
         ((let*? exp) (evaln (let*->nested-lets exp) env)) ; enough.
+        ((letrec? exp) (evaln (letrec->let exp) env))
         ((application? exp) (applyn (evaln (operator exp) env) (list-of-values (operands exp) env)))
         (else (error "Unknown expression type -- EVAL" exp))))
 
@@ -278,6 +279,28 @@
   (iter (cadr exp)))
 
 
+(define (letrec? exp) (tagged-list? exp 'letrec))
+
+(define (letrec-variables exp) (map car (cadr exp)))
+(define (letrec-expressions exp) (map cadr (cadr exp)))
+(define (make-variables variables)
+  (if (null? variables)
+      nil
+      (cons (list (car variables) ''*unattached)
+            (make-variables (cdr variables)))))
+(define (set-variables! variables expressions)
+  (if (null? variables)
+      nil
+      (cons (list 'set! (car variables) (car expressions))
+            (set-variables! (cdr variables) (cdr expressions)))))
+(define (letrec-body exp) (cddr exp))
+(define (letrec->let exp)
+  (list 'let
+        (make-variables (letrec-variables exp))
+        (make-begin (append (set-variables! (letrec-variables exp) (letrec-expressions exp))
+                            (letrec-body exp)))))
+
+
 (define (true? x)
   (not (eq? x false)))
 (define (false? x)
@@ -339,8 +362,9 @@
   (define (env-loop env)
     (define (scan vars vals)
       (cond ((null? vars) (env-loop (enclosing-environment env)))
-            ((eq? (car vals) '*unassigned*) (error "Variable is not yet assigned" (car vars)))
-            ((eq? var (car vars)) (car vals))
+            ((eq? var (car vars)) (if (eq? (car vals) '*unassigned*)
+                                      (error "Variable is not yet assigned" (car vars))
+                                      (car vals)))
             (else (scan (cdr vars) (cdr vals)))))
     (if (eq? env the-empty-environment)
         (error "Unbound variable" var)
@@ -426,7 +450,7 @@
     (define (initial-variables variables)
       (if (null? variables)
           nil
-          (cons (list (car variables) '*unassigned*)
+          (cons (list (car variables) ''*unassigned*)
                 (initial-variables (cdr variables)))))
     (define (set-variables! variables values)
       (if (null? variables)

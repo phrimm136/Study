@@ -3,8 +3,9 @@
   (define (env-loop env)
     (define (scan vars vals)
       (cond ((null? vars) (env-loop (enclosing-environment env)))
-            ((eq? (car vals) '*unassigned*) (error "Variable is not yet assigned" (car vars)))
-            ((eq? var (car vars)) (car vals))
+            ((eq? var (car vars)) (if (eq? (car vals) '*unassigned*)
+                                      (error "Variable is not yet assigned" (car vars))
+                                      (car vals)))
             (else (scan (cdr vars) (cdr vals)))))
     (if (eq? env the-empty-environment)
         (error "Unbound variable" var)
@@ -33,7 +34,7 @@
     (define (initial-variables variables)
       (if (null? variables)
           nil
-          (cons (list (car variables) '*unassigned*)
+          (cons (list (car variables) ''*unassigned*) ; Double quoting is very important
                 (initial-variables (cdr variables)))))
     (define (set-variables! variables values)
       (if (null? variables)
