@@ -383,21 +383,24 @@
 
 
 (define (compar)
-  (let ((start-time (runtime)))
-    (prompt-for-input input-prompt)
-    (let ((input (read)))
+  (prompt-for-input input-prompt)
+  (let ((input (read)))
+    (let ((start-time (runtime)))
       (let ((output-eval (evaln input the-global-environment))
             (eval-time (runtime)))
-        (announce-output output-prompt)
-        (user-print output-eval)
-        (newline)
-        (display "Time: ")
-        (display (- eval-time start-time))
-        (newline)
         (let ((output-anal-eval (analyzed-evaln input the-global-environment))
               (anal-eval-time (runtime)))
+          (announce-output "Result: ")
+          (display output-eval)
+          (newline)
+          
+          (announce-output output-prompt)
+          (newline)
+          (display "Time: ")
+          (display (- eval-time start-time))
+          (newline)
+          
           (announce-output output-anal-prompt)
-          (user-print output-anal-eval)
           (newline)
           (display "Time: ")
           (display (- anal-eval-time eval-time))
@@ -413,7 +416,10 @@
 ;       (if (= k 1)
 ;           1
 ;           (* k (ft ft (- k 1)))))))
-;  100)
+;  10000)
 
-; M-eval time: 3538181
-; M-anal-eval time: 22672
+; M-eval time: 360404 / 416704 / 366866
+; M-anal-eval time: 297324 / 315630 / 278827
+
+
+; Eval takes more time due to redundant evaluation.
