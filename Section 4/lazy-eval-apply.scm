@@ -10,32 +10,57 @@
         ((lambda? exp) (make-procedure (lambda-parameters exp) (lambda-body exp) env))
         ((begin? exp) (eval-sequence (begin-actions exp) env))
         ((cond? exp) (evaln (cond->if exp) env))
-        ((and? exp) (eval-and exp env))
-        ((or? exp) (eval-or exp env))
-        ((let? exp) (evaln (let->combination exp) env))
-        ((let*? exp) (evaln (let*->nested-lets exp) env)) ; enough.
-        ((letrec? exp) (evaln (letrec->let exp) env))
-        ((application? exp) (applyn (evaln (operator exp) env) (list-of-values (operands exp) env)))
+        ((application? exp) (applyn (actual-value (operator exp) env) (operands exp) env))
         (else (error "Unknown expression type -- EVAL" exp))))
 
+(define (actual-value exp env)
+  (force-it (evaln exp env)))
 
-(define (applyn procedure arguments)
-  (cond ((primitive-procedure? procedure) (apply-primitive-procedure procedure arguments))
-        ((compound-procedure? procedure) (eval-sequence (procedure-body procedure)
-                                                        (extend-environment (procedure-parameters procedure)
-                                                                            arguments
-                                                                            (procedure-environment procedure))))
-        (else (error "Unknown expression type -- APPLY" procedure))))
 
-(define (list-of-values exps env)
+(define (applyn procedure arguments env)
+  (cond ((primitive-procedure? procedure) (apply-primitive-procedure procedure
+                                                                     (list-of-arg-values arguments env)))
+        ((compound-procedure? procedure)
+         (eval-sequence (procedure-body procedure)
+                        (extend-environment (procedure-parameters procedure)
+                                            (list-of-delayed-args arguments env)
+                                            (procedure-environment procedure))))
+        (else (error "Unknown procedure type -- APPLY" procedure))))
+
+(define (list-of-arg-values exps env)
   (if (no-operands? exps)
       '()
-      (cons (evaln (first-operand exps) env)
-            (list-of-values (rest-operands exps) env))))
+      (cons (actual-value (first-operand exps) env)
+            (list-of-arg-values (rest-operands exps) env))))
+(define (list-of-delayed-args exps env)
+  (if (no-operands? exps)
+      '()
+      (cons (delay-it (first-operand exps) env)
+            (list-of-delayed-args (rest-operands exps) env))))
+
+
+(define (delay-it exp env)
+  (list 'thunk exp env))
+(define (thunk? obj)
+  (tagged-list? obj 'thunk))
+(define (thunk-exp thunk) (cadr thunk))
+(define (thunk-env thunk) (caddr thunk))
+
+(define (evaluated-thunk? obj)
+  (tagged-list? obj 'evaluated-thunk))
+(define (thunk-value evaluated-thunk) (cadr evaluated-thunk))
+(define (force-it obj)
+  (cond ((thunk? obj) (let ((result (actual-value (thunk-exp obj) (thunk-env obj))))
+                         (set-car! obj 'evaluated-thunk)
+                         (set-car! (cdr obj) result)
+                         (set-cdr! (cdr obj) '())
+                         result))
+        ((evaluated-thunk? obj) (thunk-value obj))
+        (else obj)))
 
 
 (define (eval-if exp env)
-  (if (true? (evaln (if-predicate exp) env))
+  (if (true? (actual-value (if-predicate exp) env))
       (evaln (if-consequent exp) env)
       (evaln (if-alternative exp) env)))
 
@@ -170,137 +195,6 @@
                      (expand-clauses rest))))))
 
 
-(define (and-clauses exp) (cdr exp))
-(define (or-clauses exp) (cdr exp))
-(define (null-exp? exp) (null? exp))
-
-(define (and? exp)
-  (tagged-list? exp 'and))
-
-(define (eval-and exp env)
-  (if (null-exp? exp)
-      false
-      (let ((first (first-exp exp))
-            (rest (rest-exps exp)))
-        (cond ((last-exp? exp) first)
-              (first (eval-and rest env))
-              (else false)))))
-
-(define (or? exp)
-  (tagged-list? exp 'or))
-
-(define (eval-or exp env)
-  (if (null-exp? exp)
-      false
-      (let ((first (first-exp exp))
-            (rest (rest-exps exp)))
-        (cond ((last-exp? exp) first)
-              (first true)
-              (else (eval-or rest env))))))
-
-(define (and->if exp)
-  (expand-and-clauses (and-clauses exp)))
-(define (expand-and-clauses exp)
-  (let ((first (first-exp exp))
-        (rest (rest-exps exp)))
-    (cond ((null-exp? exp) false)
-          ((last-exp? exp) first)
-          (else (make-if (cond-predicate first)
-                         (and->if rest)
-                         false)))))
-(define (or->if exp)
-  (expand-clauses (or-clauses exp)))
-(define (expand-or-clauses exp)
-  (let ((first (first-exp exp))
-        (rest (rest-exps exp)))
-    (cond ((null-exp? exp) false)
-          ((last-exp? exp) first)
-          (else (make-if (cond-predicate first)
-                         true
-                         (or->if rest))))))
-
-
-(define (let? exp)
-  (tagged-list? exp 'let))
-
-(define (let-variables clauses)
-  (map car (car clauses)))
-(define (let-expressions clauses)
-  (map cadr (car clauses)))
-(define (let-body clauses) (cdr clauses))
-
-(define (named-let? exp) (and (let? exp) (symbol? (cadr exp))))
-
-(define (named-let-variable clauses) (car clauses))
-(define (named-let-parameters clauses)
-  (define (iter bindings) 
-    (if (null? bindings)
-        nil
-        (cons (caar bindings)
-              (iter (cdr bindings)))))
-  (iter (cadr clauses)))
-(define (named-let-arguments clauses)
-  (define (iter bindings)
-    (if (null? bindings)
-        nil
-        (cons (cadar bindings)
-              (iter (cdr bindings)))))
-  (iter (cadr clauses)))
-(define (named-let-body clauses) (cddr clauses))
-(define (named-let->combination exp)
-  (let ((clauses (cdr exp)))
-    (make-begin (list (list 'define
-                            (named-let-variable clauses)
-                            (make-lambda (named-let-parameters clauses)
-                                         (named-let-body clauses)))
-                      (cons (named-let-variable clauses)
-                            (named-let-arguments clauses))))))
-(define (let->combination exp)
-  (let ((clauses (cdr exp)))
-    (if (named-let? clauses)
-        (named-let->combination exp)
-        (cons (make-lambda (let-variables clauses)
-                           (let-body clauses))
-              (let-expressions clauses)))))
-
-
-(define (let*? exp)
-  (tagged-list? exp 'let*))
-
-(define (let*-null? clauses) (null? clauses))
-(define (let*-expression clauses) (car clauses))
-(define (let*-rest-expressions clauses) (cdr clauses))
-(define (let*-body exp) (caddr exp))
-(define (let*->nested-lets exp)
-  (define (iter clauses)
-    (if (let*-null? clauses)
-        (sequence->exp (let*-body exp))
-        (list 'let (list (let*-expression clauses)) (iter (let*-rest-expressions clauses)))))
-  (iter (cadr exp)))
-
-
-(define (letrec? exp) (tagged-list? exp 'letrec))
-
-(define (letrec-variables exp) (map car (cadr exp)))
-(define (letrec-expressions exp) (map cadr (cadr exp)))
-(define (make-variables variables)
-  (if (null? variables)
-      nil
-      (cons (list (car variables) ''*unattached)
-            (make-variables (cdr variables)))))
-(define (set-variables! variables expressions)
-  (if (null? variables)
-      nil
-      (cons (list 'set! (car variables) (car expressions))
-            (set-variables! (cdr variables) (cdr expressions)))))
-(define (letrec-body exp) (cddr exp))
-(define (letrec->let exp)
-  (list 'let
-        (make-variables (letrec-variables exp))
-        (make-begin (append (set-variables! (letrec-variables exp) (letrec-expressions exp))
-                            (letrec-body exp)))))
-
-
 (define (true? x)
   (not (eq? x false)))
 (define (false? x)
@@ -317,6 +211,7 @@
         (list 'caddr caddr) (list 'cdadr cdadr) (list 'cddar cddar) (list 'cdddr cdddr)
         (list 'cons cons) (list 'list list)
         (list 'null? null?) (list 'pair? pair?) (list 'number? number?) (list 'string? string?)
+        (list 'newline newline) (list 'display display)
         (list 'square (lambda (x) (* x x))) (list 'cube (lambda (x) (* x x x))) (list 'sqrt sqrt)
         (list '+ +) (list '- -) (list '* *) (list '/ /) (list '= =)
         (list 'remainder remainder) (list 'modulo modulo) (list 'quotient quotient)
@@ -344,7 +239,7 @@
 (define (procedure-environment p) (cadddr p))
 
 (define (make-procedure parameters body env)
-  (list 'procedure parameters (scan-out-defines body) env))
+  (list 'procedure parameters body env))
 
 
 (define (enclosing-environment env) (cdr env))
@@ -409,12 +304,12 @@
 (define the-global-environment (setup-environment))
 
 
-(define input-prompt ";;; M-Eval input:")
-(define output-prompt ";;; M-Eval value:")
+(define input-prompt ";;; L-Eval input:")
+(define output-prompt ";;; L-Eval value:")
 (define (driver-loop)
   (prompt-for-input input-prompt)
   (let ((input (read)))
-    (let ((output (evaln input the-global-environment)))
+    (let ((output (actual-value input the-global-environment)))
       (announce-output output-prompt)
       (user-print output)))
   (driver-loop))
@@ -430,44 +325,5 @@
                      '<procedure-env>))
       (display object)))
 
-
-(define (scan-out-defines proc)
-  (let ((body-list proc))
-    (define (internal-definition-variable body-list)
-      (let ((body (car body-list))
-            (rest (cdr body-list)))
-        (cond ((eq? body-list nil) nil)
-              ((definition? body) (cons (definition-variable body)
-                                        (internal-definition-variable rest)))
-              (else nil))))
-    (define (internal-definition-value body-list)
-      (let ((body (car body-list))
-            (rest (cdr body-list)))
-        (cond ((eq? body-list nil) nil)
-              ((definition? body) (cons (definition-value body)
-                                        (internal-definition-value rest)))
-              (else nil))))
-    (define (initial-variables variables)
-      (if (null? variables)
-          nil
-          (cons (list (car variables) ''*unassigned*)
-                (initial-variables (cdr variables)))))
-    (define (set-variables! variables values)
-      (if (null? variables)
-          nil
-          (cons (list 'set! (car variables) (car values))
-                (set-variables! (cdr variables) (cdr values)))))
-    (define (true-body body-list)
-      (cond ((null? body-list) body-list)
-            ((definition? (car body-list)) (true-body (cdr body-list)))
-            (else body-list)))
-    (let ((variables (internal-definition-variable body-list)))
-      (if (null? variables)
-          body-list
-          (list (list 'let
-                      (initial-variables variables)
-                      (make-begin (append (set-variables! (internal-definition-variable body-list)
-                                                          (internal-definition-value body-list))
-                                          (true-body body-list)))))))))
 
 (driver-loop)

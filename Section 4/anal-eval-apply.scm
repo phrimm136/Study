@@ -317,8 +317,8 @@
 (define the-global-environment (setup-environment))
 
 
-(define input-prompt ";;; M-eval input:")
-(define output-prompt ";;; M-eval value:")
+(define input-prompt ";;; M-Eval input:")
+(define output-prompt ";;; M-Eval value:")
 (define (anal-driver-loop)
   (prompt-for-input input-prompt)
   (let ((input (read)))
