@@ -1,0 +1,73 @@
+#lang sicp
+(define (permutations s)
+  (if (null? s)
+      (list nil)
+      (flatmap (lambda (x)
+                 (map (lambda (p) (cons x p))
+                      (permutations (remove x s))))
+               s)))
+(define (remove item sequence)
+  (filter (lambda (x) (not (eq? x item)))
+          sequence))
+(define (filter predicate sequence)
+  (cond ((null? sequence) nil)
+        ((predicate (car sequence))
+         (cons (car sequence)
+               (filter predicate (cdr sequence))))
+        (else (filter predicate (cdr sequence)))))
+(define (flatmap proc seq)
+  (accumulate append nil (map proc seq)))
+(define (accumulate op initial sequence)
+  (if (null? sequence)
+      initial
+      (op (car sequence)
+          (accumulate op initial (cdr sequence)))))
+
+(define (xor a b)
+    (and (or a b) (not (and a b))))
+
+
+(define (liar-game)
+  (define (print-list results)
+    (display results)
+    (newline))
+  (define (restricts candidates)
+    (define (caddddr list) (car (cddddr list)))
+    (and (xor (eq? (cadr candidates) 'kitty)
+              (eq? (caddr candidates) 'betty))
+         (xor (eq? (car candidates) 'ethel)
+              (eq? (cadr candidates) 'joan))
+         (xor (eq? (caddr candidates) 'joan)
+              (eq? (caddddr candidates) 'ethel))
+         (xor (eq? (cadr candidates) 'kitty)
+              (eq? (cadddr candidates) 'mary))
+         (xor (eq? (cadddr candidates) 'mary)
+              (eq? (car candidates) 'betty))))
+  (print-list (filter restricts (permutations '(betty ethel joan kitty mary)))))
+
+
+(liar-game)
+
+; (kitty joan betty mary ethel)
+
+
+; amb version
+
+(define (liars)
+  (let ((betty (amb 1 2 3 4 5))
+        (ethel (amb 1 2 3 4 5))
+        (joan (amb 1 2 3 4 5))
+        (kitty (amb 1 2 3 4 5))
+        (mary (amb 1 2 3 4 5)))
+    (require
+      (distinct? (list betty ethel joan kitty mary)))
+    (require (xor (= kitty 2) (= betty 3)))
+    (require (xor (= ethel 1) (= joan 2)))
+    (require (xor (= joan 3) (= ethel 5)))
+    (require (xor (= kity 2) (= mary 4)))
+    (require (xor (= mary 4) (= betty 1)))
+    (list (list 'betty betty)
+          (list 'ethel ethel)
+          (list 'joan joan)
+          (list 'kitty kitty)
+          (list 'mary mary))))
