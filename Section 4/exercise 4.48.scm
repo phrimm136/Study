@@ -1,0 +1,42 @@
+#lang sicp
+(define nouns '(noun student professor cat class))
+(define verbs '(verb studies lectures eats sleeps))
+(define articles '(article the a))
+(define prepositions '(prep for to in by with))
+(define adjectives '(adj good passionate sleepy))
+(define adverbs '(adv well deeply hard))
+
+(define (parse-sentence) (list 'sentence (parse-noun-phrase) (parse-verb-phrase)))
+
+(define (parse-noun-phrase)
+  (define (maybe-extend noun-phrase)
+    (amb noun-phrase
+         (maybe-extend (list 'noun-phrase noun-phrase (parse-prepositional-phrase)))))
+  (maybe-extend (parse-simple-noun-phrase)))
+(define (parse-simple-noun-phrase)
+  (define (maybe-extend art-phrase)
+    (amb (list 'simple-noun-phrase art-phrase (parse-word nouns))
+         (list 'simple-noun-phrase art-phrase (parse-adjective-phrase))))
+  (maybe-extend (parse-word articles)))
+(define (parse-verb-phrase)
+  (define (maybe-extend verb-phrase)
+    (amb verb-phrase
+         (maybe-extend (list 'verb-phrase verb-phrase (parse-prepositional-phrase)))))
+  (maybe-extend (parse-simple-verb-phrase)))
+(define (parse-simple-verb-phrase)
+  (define (maybe-extend verb-phrase)
+    (amb verb-phrase
+         (list 'verb-phrase verb-phrase (parse-adverb-phrase))
+         (list 'verb-phrase (parse-adverb-phrase))))
+  (maybe-extend (parse-word verbs)))
+(define (parse-prepositional-phrase)
+  (list 'prep-phrase (parse-word prepositions) (parse-noun-phrase)))
+(define (parse-adjective-phrase)
+  (amb (list 'adj-phrase (parse-word adjectives) (parse-word nouns))
+       (list 'adj-phrase (parse-adverb-phrase) (parse-word nouns))))
+(define (parse-adverb-phrase)
+  (define (maybe-extend adv-phrase)
+    (amb adv-phrase
+         (maybe-extend (list 'adv-phrase adv-phrase (parse-word adjectives)))
+         (maybe-extend (list 'adv-phrase adv-phrase (parse-word verbs)))))
+  (maybe-extend (parse-word adverbs)))

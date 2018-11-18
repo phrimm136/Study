@@ -385,7 +385,8 @@
         (list 'sin sin) (list 'cos cos) (list 'tan tan)
         (list 'asin asin) (list 'acos acos) (list 'atan atan)
         (list 'floor floor) (list 'ceiling ceiling) (list 'truncate truncate) (list 'round round)
-        (list 'map map) (list 'not not) (list 'eq? eq?) (list 'member member)))
+        (list 'map map) (list 'not not) (list 'eq? eq?) (list 'memq memq) (list 'member member)
+        (list 'display display) (list 'newline newline)))
 (define (primitive-procedure-names)
   (map car primitive-procedures))
 (define (primitive-procedure-objects)
@@ -474,6 +475,12 @@
               initial-env
               (lambda (val next-alternative) val)
               (lambda () 'failed))
+    (ambevaln '(define (an-integer-between low high)
+                 (require (<= low high))
+                 (amb low (an-integer-between (+ low 1) high)))
+              initial-env
+              (lambda (val next-alternative) val)
+              (lambda () 'falied))
     (ambevaln '(define (prime-sum-pair list1 list2)
                  (let ((a (an-element-of list1))
                        (b (an-element-of list2)))
@@ -482,15 +489,108 @@
               initial-env
               (lambda (val next-alternative) val)
               (lambda () 'failed))
-    (ambevaln '(define (distinct? items)
-                 (cond ((null? items) true)
-                       ((null? (cdr items)) true)
-                       ((member (car items) (cdr items)) false)
-                       (else (distinct? (cdr items)))))
+    ; Parsing natural language
+    (ambevaln '(define nouns '(noun student professor cat class))
               initial-env
               (lambda (val next-alternative) val)
               (lambda () 'failed))
-
+    (ambevaln '(define verbs '(verb studies lectures eats sleeps))
+              initial-env
+              (lambda (val next-alternative) val)
+              (lambda () 'failed))
+    (ambevaln '(define articles '(article the a))
+              initial-env
+              (lambda (val next-alternative) val)
+              (lambda () 'failed))
+    (ambevaln '(define prepositions '(prep for to in by with))
+              initial-env
+              (lambda (val next-alternative) val)
+              (lambda () 'failed))
+    (ambevaln '(define adjectives '(adj good passionate sleepy))
+              initial-env
+              (lambda (val next-alternative) val)
+              (lambda () 'failed))
+    (ambevaln '(define adverbs '(adv well deeply hard))
+              initial-env
+              (lambda (val next-alternative) val)
+              (lambda () 'failed))
+    (ambevaln '(define (parse-sentence) (list 'sentence (parse-noun-phrase) (parse-verb-phrase)))
+              initial-env
+              (lambda (val next-alternative) val)
+              (lambda () 'failed))
+    (ambevaln '(define (parse-noun-phrase)
+                 (define (maybe-extend noun-phrase)
+                   (amb noun-phrase
+                        (maybe-extend (list 'noun-phrase noun-phrase (parse-prepositional-phrase)))))
+                 (maybe-extend (parse-simple-noun-phrase)))
+              initial-env
+              (lambda (val next-alternative) val)
+              (lambda () 'failed))
+    (ambevaln '(define (parse-simple-noun-phrase)
+                 (define (maybe-extend art-phrase)
+                   (amb (list 'simple-noun-phrase art-phrase (parse-word nouns))
+                        (list 'simple-noun-phrase art-phrase (parse-adjective-phrase))))
+                 (maybe-extend (parse-word articles)))
+              initial-env
+              (lambda (val next-alternative) val)
+              (lambda () 'failed))
+    (ambevaln '(define (parse-verb-phrase)
+                 (define (maybe-extend verb-phrase)
+                   (amb verb-phrase
+                        (maybe-extend (list 'verb-phrase verb-phrase (parse-prepositional-phrase)))))
+                 (maybe-extend (parse-simple-verb-phrase)))
+              initial-env
+              (lambda (val next-alternative) val)
+              (lambda () 'failed))
+    (ambevaln '(define (parse-simple-verb-phrase)
+                 (define (maybe-extend verb-phrase)
+                   (amb verb-phrase
+                        (list 'verb-phrase verb-phrase (parse-adverb-phrase))
+                        (list 'verb-phrase (parse-adverb-phrase))))
+                 (maybe-extend (parse-word verbs)))
+              initial-env
+              (lambda (val next-alternative) val)
+              (lambda () 'failed))
+    (ambevaln '(define (parse-prepositional-phrase) (list 'prep-phrase (parse-word prepositions) (parse-noun-phrase)))
+              initial-env
+              (lambda (val next-alternative) val)
+              (lambda () 'failed))
+    (ambevaln '(define (parse-adjective-phrase)
+                 (amb (list 'adj-phrase (parse-word adjectives) (parse-word nouns))
+                      (list 'adj-phrase (parse-adverb-phrase) (parse-word nouns))))
+              initial-env
+              (lambda (val next-alternative) val)
+              (lambda () 'failed))
+    (ambevaln '(define (parse-adverb-phrase)
+                 (define (maybe-extend adv-phrase)
+                   (amb adv-phrase
+                        (maybe-extend (list 'adv-phrase adv-phrase (parse-word adjectives)))
+                        (maybe-extend (list 'adv-phrase adv-phrase (parse-word verbs)))))
+                 (maybe-extend (parse-word adverbs)))
+              initial-env
+              (lambda (val next-alternative) val)
+              (lambda () 'failed))
+    (ambevaln '(define (parse-word word-list)
+                 (require (not (null? *unparsed*)))
+                 (require (memq (car *unparsed*) (cdr word-list)))
+                 (let ((found-word (car *unparsed*)))
+                   (set! *unparsed* (cdr *unparsed*))
+                   (list (car word-list) found-word)))
+              initial-env
+              (lambda (val next-alternative) val)
+              (lambda () 'failed))
+    (ambevaln '(define *unparsed* '())
+              initial-env
+              (lambda (val next-alternative) val)
+              (lambda () 'failed))
+    (ambevaln '(define (parse input)
+                 (set! *unparsed* input)
+                 (let ((sent (parse-sentence)))
+                   (require (null? *unparsed*))
+                   sent))              
+              initial-env
+              (lambda (val next-alternative) val)
+              (lambda () 'failed))    
     initial-env))
 (define the-global-environment (setup-environment))
 

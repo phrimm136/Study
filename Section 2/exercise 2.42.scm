@@ -17,6 +17,7 @@
 (define (flatmap proc seq)
   (accumulate append nil (map proc seq)))
 
+
 (define (queens board-size)
   (define empty-board nil)
   (define (adjoin-position row rest-of-queens)
@@ -30,7 +31,6 @@
       (if (= (car new-low) 0) (+ 1 (idx-make (cdr new-low))) 1))
     (define (idx-search idx old-row)
       (if (= idx 1) (car old-row) (idx-search (- idx 1) (cdr old-row))))
-
     (let ((idx (idx-make (car positions))))
       (define (column-test old-rows)
         (cond ((null? old-rows) true)
@@ -61,4 +61,18 @@
                          (queen-cols (- k 1))))))
   (queen-cols board-size))
 
-(queens 8)
+(define (display-maps maps)
+  (if (null? maps)
+      (display "")
+      (let ((first (car maps))
+            (rests (cdr maps)))
+        (define (iter map)
+          (if (null? map)
+              (newline)
+              (begin (display (car map))
+                     (newline)
+                     (iter (cdr map)))))
+        (iter first)
+        (display-maps rests))))
+
+(display-maps (queens 4))

@@ -1,0 +1,20 @@
+#lang sicp
+(define (n-queens board-size)
+  (define (check case rests diagonal)
+    (cond ((null? rests) true)
+          ((= case (car rests)) false)
+          ((= (abs (- case (car rests))) diagonal) false)
+          (else (check case (cdr rests) (inc diagonal)))))
+  (define (iter queens)
+    (cond ((null? queens) true)
+          ((check (car queens) (cdr queens) 1) (iter (cdr queens)))
+          (else false)))
+  (define (make-case n)
+    (if (= n 0)
+        '()
+        (cons (an-integer-between 1 board-size) (make-case (dec n)))))
+  (let ((queens (make-case board-size)))
+    (require (iter queens))
+    queens))
+
+; Can't show board as result
