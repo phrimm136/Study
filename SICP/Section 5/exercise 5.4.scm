@@ -91,5 +91,6 @@
             (branch (label exp-done))
             (assign p (op *) (reg p) (reg b))
             (assign n (op -) (reg n) (const 1))
+            (goto (labal exp-loop))
 
             exp-done)
