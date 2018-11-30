@@ -10,7 +10,7 @@
                         (let ((next-inst (car text)))
                           (if (symbol? next-inst)
                               (if (assoc next-inst labels)
-                                  (error "Duplicate label detected - " next-inst)
+                                  (error "Duplicated label detected: " next-inst)
                                   (receive insts
                                            (cons (make-label-entry next-inst insts) labels)))
                               (receive (cons (make-instruction next-inst) insts)
