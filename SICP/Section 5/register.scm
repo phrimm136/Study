@@ -5,8 +5,7 @@
                 ((machine 'allocate-register) register-name))
               register-names)
     ((machine 'install-operations) ops)
-    ((machine 'install-instruction-sequence)
-     (assemble controller-text machine))
+    ((machine 'install-instruction-sequence) (assemble controller-text machine))
     machine))
 
 (define (make-register name)
@@ -53,8 +52,7 @@
       (define (allocate-register name)
         (if (assoc name register-table)
             (error "Multiply defined register: " name)
-            (set! register-table
-                  (cons (list name (make-register name)) register-table)))
+            (set! register-table (cons (list name (make-register name)) register-table)))
         'register-allocated)
       (define (lookup-register name)
         (let ((val (assoc name register-table)))
@@ -246,20 +244,41 @@
         (error "Unknown operation -- ASSEMBLE" symbol))))
 
 
-(define gcd-machine
-  (make-machine '(a b t)
-                (list (list 'rem remainder) (list '= =))
-                '(test-b
-                  (test (op =) (reg b) (const 0))
-                  (branch (label gcd-done))
-                  (assign t (op rem) (reg a) (reg b))
-                  (assign a (reg b))
-                  (assign b (reg t))
-                  (goto (label test-b))
-                 
-                  gcd-done)))
+(define fib-machine
+  (make-machine '(n continue val)
+                (list (list '< <) (list '- -) (list '+ +))
+                '((assign continue (label fib-done))
+                
+                  fib-loop
+                  (test (op <) (reg n) (const 2))
+                  (branch (label immediate-answer))
+                  (save continue)
+                  (assign continue (label afterfib-n-1))
+                  (save n)
+                  (assign n (op -) (reg n) (const 1))
+                  (goto (label fib-loop))
+                  
+                  afterfib-n-1
+                  (restore n)
+                  (restore continue)
+                  (assign n (op -) (reg n) (const 2))
+                  (save continue)
+                  (assign continue (label afterfib-n-2))
+                  (save val)
+                  (goto (label fib-loop))
+                  
+                  afterfib-n-2
+                  (assign n (reg val))
+                  (restore val)
+                  (restore continue)
+                  (assign val (op +) (reg val) (reg n))
+                  (goto (reg continue))
+                  
+                  immediate-answer
+                  (assign val (reg n))
+                  (goto (reg continue))
+                  fib-done)))
 
-(set-register-contents! gcd-machine 'a 206)
-(set-register-contents! gcd-machine 'b 40)
-(start gcd-machine)
-(get-register-contents gcd-machine 'a)
+(set-register-contents! fib-machine 'n 5)
+(start fib-machine)
+(get-register-contents fib-machine 'val)
