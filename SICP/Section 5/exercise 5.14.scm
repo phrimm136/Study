@@ -154,6 +154,8 @@
         ((eq? (car inst) 'save) (make-save inst machine stack pc))
         ((eq? (car inst) 'restore) (make-restore inst machine stack pc))
         ((eq? (car inst) 'perform) (make-perform inst machine labels ops pc))
+        ((eq? (car inst) 'initialize) (make-initialize inst machine stack pc))
+        ((eq? (car inst) 'statistics) (make-statistics inst machine stack pc))
         (else (error "Unknown instruction type -- ASSEMBLE" inst))))
 
 (define (make-assign inst machine labels operations pc)
@@ -262,42 +264,57 @@
         (error "Unknown operation -- ASSEMBLE" symbol))))
 
 
-(define fib-machine
+(define (make-initialize inst machine stack pc)
+  (lambda ()
+    (stack 'initialize)
+    (advance-pc pc)))
+
+
+(define (make-statistics inst machine stack pc)
+  (lambda ()
+    (stack 'print-statistics)
+    (advance-pc pc)))
+
+
+(define fact-machine
   (make-machine '(n continue val)
-                (list (list '< <) (list '- -) (list '+ +))
-                '((assign continue (label fib-done))
-                
-                  fib-loop
-                  (test (op <) (reg n) (const 2))
-                  (branch (label immediate-answer))
+                (list (list '= =) (list '- -) (list '* *))
+                '((assign continue (label fact-done))
+                  (initialize)
+                  
+                  fact-loop
+                  (test (op =) (reg n) (const 1))
+                  (branch (label base-case))
                   (save continue)
-                  (assign continue (label afterfib-n-1))
                   (save n)
                   (assign n (op -) (reg n) (const 1))
-                  (goto (label fib-loop))
+                  (assign continue (label after-fact))
+                  (goto (label fact-loop))
                   
-                  afterfib-n-1
+                  after-fact
                   (restore n)
                   (restore continue)
-                  (assign n (op -) (reg n) (const 2))
-                  (save continue)
-                  (assign continue (label afterfib-n-2))
-                  (save val)
-                  (goto (label fib-loop))
-                  
-                  afterfib-n-2
-                  (assign n (reg val))
-                  (restore val)
-                  (restore continue)
-                  (assign val (op +) (reg val) (reg n))
+                  (assign val (op *) (reg n) (reg val))
                   (goto (reg continue))
                   
-                  immediate-answer
-                  (assign val (reg n))
+                  base-case
+                  (assign val (const 1))
                   (goto (reg continue))
-                  fib-done)))
+                  
+                  fact-done)))
 
-(set-register-contents! fib-machine 'n 5)
-(start fib-machine)
-(get-register-contents fib-machine 'val)
-(statistics fib-machine)
+(define (fact n)
+  (define (iter k)
+    (if (>= n k)
+        (begin (set-register-contents! fact-machine 'n k)
+               (start fact-machine)
+               (get-register-contents fact-machine 'val)
+               (statistics fact-machine)
+               (iter (+ k 1)))))
+  (iter 2))
+
+(fact 5)
+
+
+; number of push operations in factorial computation: 2*(n-1)
+; number of max stack depth in factorial computation: 2*(n-1)
