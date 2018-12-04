@@ -192,7 +192,7 @@
         (ops (machine 'operations)))
     (for-each (lambda (inst)
                 (if (symbol? inst)
-                    '()
+                    nil
                     (set-instruction-execution-proc! inst
                                                      (make-execution-procedure (instruction-text inst) labels machine pc flag stack ops))))
               insts)))
