@@ -60,7 +60,9 @@
 (define (make-new-machine)
   (let ((pc (make-register 'pc))
         (flag (make-register 'flag))
-        (stack (make-stack)))
+        (stack (make-stack))
+        (count 0)
+        (trace? false)) ; default: trace off
     (let ((the-instruction-sequence (list (list 'initialize-stack (lambda () (stack 'initialize)))
                                           (list 'print-stack-statistics (lambda () (stack 'print-statistics)))))
           (the-ops (list (list 'initialize-stack (lambda () (stack 'initialize)))))
@@ -79,8 +81,26 @@
         (let ((insts (get-contents pc)))
           (if (null? insts)
               'done
-              (begin ((instruction-execution-proc (car insts)))
+              (begin (if trace?
+                         (begin (display (caar insts))
+                                (newline)))
+                     (set! count (+ count 1))
+                     ((instruction-execution-proc (car insts)))
                      (execute)))))
+      (define (print-and-reset)
+        (display "Instruction counted: ")
+        (display count)
+        (newline)
+        (set! count 0))
+      (define (trace-on)
+        (display "--Instruction tracing activated--")
+        (newline)
+        (newline)
+        (set! trace? true))
+      (define (trace-off)
+        (display "--Instruction tracing deactivated--")
+        (newline)
+        (set! trace? false))
       (define (dispatch message)
         (cond ((eq? message 'start) (set-contents! pc the-instruction-sequence)
                                     (execute))
@@ -90,6 +110,9 @@
               ((eq? message 'install-operations) (lambda (ops) (set! the-ops (append the-ops ops))))
               ((eq? message 'stack) stack)
               ((eq? message 'operations) the-ops)
+              ((eq? message 'print) (print-and-reset))
+              ((eq? message 'trace-on) (trace-on))
+              ((eq? message 'trace-off) (trace-off))
               (else (error "Unknown request -- MACHINE" message))))
       dispatch)))
 (define (start machine)
@@ -103,6 +126,12 @@
   ((machine 'get-register) reg-name))
 (define (statistics machine)
   ((machine 'stack) 'print-statistics))
+(define (print-count machine)
+  (machine 'print))
+(define (trace-on machine)
+  (machine 'trace-on))
+(define (trace-off machine)
+  (machine 'trace-off))
 
 
 (define (assemble controller-text machine)
@@ -154,6 +183,9 @@
         ((eq? (car inst) 'save) (make-save inst machine stack pc))
         ((eq? (car inst) 'restore) (make-restore inst machine stack pc))
         ((eq? (car inst) 'perform) (make-perform inst machine labels ops pc))
+        ((eq? (car inst) 'print-count) (make-print-count inst machine pc))
+        ((eq? (car inst) 'trace-on) (make-trace-on inst machine pc))
+        ((eq? (car inst) 'trace-off) (make-trace-off inst machine pc))
         (else (error "Unknown instruction type -- ASSEMBLE" inst))))
 
 (define (make-assign inst machine labels operations pc)
@@ -262,10 +294,28 @@
         (error "Unknown operation -- ASSEMBLE" symbol))))
 
 
+(define (make-print-count inst machine pc)
+  (lambda ()
+    (print-count machine)
+    (advance-pc pc)))
+
+
+(define (make-trace-on inst machine pc)
+  (lambda ()
+    (trace-on machine)
+    (advance-pc pc)))
+
+(define (make-trace-off inst machine pc)
+  (lambda ()
+    (trace-off machine)
+    (advance-pc pc)))
+
+
 (define fib-machine
   (make-machine '(n continue val)
                 (list (list '< <) (list '- -) (list '+ +))
-                '((assign continue (label fib-done))
+                '((trace-on)
+                  (assign continue (label fib-done))                  
                 
                   fib-loop
                   (test (op <) (reg n) (const 2))
@@ -296,9 +346,9 @@
                   (assign val (reg n))
                   (goto (reg continue))
                   
-                  fib-done)))
+                  fib-done
+                  (print-count))))
 
 (set-register-contents! fib-machine 'n 5)
 (start fib-machine)
 (get-register-contents fib-machine 'val)
-(statistics fib-machine)
