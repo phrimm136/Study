@@ -61,9 +61,9 @@
   (let ((pc (make-register 'pc))
         (flag (make-register 'flag))
         (stack (make-stack)))
-    (let ((the-instruction-sequence (list (list 'initialize-stack (lambda () (stack 'initialize)))
-                                          (list 'print-stack-statistics (lambda () (stack 'print-statistics)))))
-          (the-ops (list (list 'initialize-stack (lambda () (stack 'initialize)))))
+    (let ((the-instruction-sequence '())
+          (the-ops (list (list 'initialize-stack (lambda () (stack 'initialize)))
+                         (list 'print-stack-statistics (lambda () (stack 'print-statistics)))))
           (register-table (list (list 'pc pc) (list 'flag flag))))
       (define (allocate-register name)
         (if (assoc name register-table)
@@ -101,8 +101,6 @@
   'done)
 (define (get-register machine reg-name)
   ((machine 'get-register) reg-name))
-(define (statistics machine)
-  ((machine 'stack) 'print-statistics))
 
 
 (define (assemble controller-text machine)
@@ -301,7 +299,8 @@
                   (assign val (const 1))
                   (goto (reg continue))
                   
-                  fact-done)))
+                  fact-done
+                  (perform (op print-stack-statistics)))))
 
 (define (fact n)
   (define (iter k)
@@ -309,7 +308,6 @@
         (begin (set-register-contents! fact-machine 'n k)
                (start fact-machine)
                (get-register-contents fact-machine 'val)
-               (statistics fact-machine)
                (iter (+ k 1)))))
   (iter 2))
 

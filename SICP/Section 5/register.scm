@@ -61,9 +61,9 @@
   (let ((pc (make-register 'pc))
         (flag (make-register 'flag))
         (stack (make-stack)))
-    (let ((the-instruction-sequence (list (list 'initialize-stack (lambda () (stack 'initialize)))
-                                          (list 'print-stack-statistics (lambda () (stack 'print-statistics)))))
-          (the-ops (list (list 'initialize-stack (lambda () (stack 'initialize)))))
+    (let ((the-instruction-sequence '())
+          (the-ops (list (list 'initialize-stack (lambda () (stack 'initialize)))
+                         (list 'print-stack-statistics (lambda () (stack 'print-statistics)))))
           (register-table (list (list 'pc pc) (list 'flag flag))))
       (define (allocate-register name)
         (if (assoc name register-table)
@@ -101,8 +101,6 @@
   'done)
 (define (get-register machine reg-name)
   ((machine 'get-register) reg-name))
-(define (statistics machine)
-  ((machine 'stack) 'print-statistics))
 
 
 (define (assemble controller-text machine)
@@ -296,9 +294,9 @@
                   (assign val (reg n))
                   (goto (reg continue))
                   
-                  fib-done)))
+                  fib-done
+                  (perform (op print-stack-statistics)))))
 
 (set-register-contents! fib-machine 'n 5)
 (start fib-machine)
 (get-register-contents fib-machine 'val)
-(statistics fib-machine)

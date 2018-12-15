@@ -90,9 +90,9 @@
         (label '())
         (pause '())
         (offset 0)) ; Index of breakpoint starts from 0 which point label.
-    (let ((the-instruction-sequence (list (list 'initialize-stack (lambda () (stack 'initialize)))
-                                          (list 'print-stack-statistics (lambda () (stack 'print-statistics)))))
-          (the-ops (list (list 'initialize-stack (lambda () (stack 'initialize)))))
+    (let ((the-instruction-sequence '())
+          (the-ops (list (list 'initialize-stack (lambda () (stack 'initialize)))
+                         (list 'print-stack-statistics (lambda () (stack 'print-statistics)))))
           (register-table (list (list 'pc pc) (list 'flag flag)))
           (breakpoint-table '()))
       (define (allocate-register name)
