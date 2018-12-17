@@ -228,7 +228,7 @@
         (list 'cons cons) (list 'list list)
         (list 'null? null?) (list 'pair? pair?) (list 'number? number?) (list 'string? string?)
         (list 'square (lambda (x) (* x x))) (list 'cube (lambda (x) (* x x x))) (list 'sqrt sqrt)
-        (list '+ +) (list '- -) (list '* *) (list '/ /) (list '= =)
+        (list '+ +) (list '- -) (list '* *) (list '/ /) (list '= =) (list '> >) (list '< <)
         (list 'remainder remainder) (list 'modulo modulo) (list 'quotient quotient)
         (list 'abs abs) (list 'inc inc) (list 'dec dec)
         (list 'gcd gcd) (list 'lcm lcm)

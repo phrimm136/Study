@@ -29,5 +29,5 @@
             (goto (label ev-if))
 
             ev-let
-            (assign exp (op let-combination) (reg exp))
-            (gto (label ev-lambda)))
+            (assign exp (op let->combination) (reg exp))
+            (goto (label ev-lambda)))

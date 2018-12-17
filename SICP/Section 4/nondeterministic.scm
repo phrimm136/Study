@@ -376,7 +376,7 @@
                           (= (remainder b a) 0))
                         (= n (smallest-divisor n))))
         (list 'square (lambda (x) (* x x))) (list 'cube (lambda (x) (* x x x))) (list 'sqrt sqrt)
-        (list '+ +) (list '- -) (list '* *) (list '/ /)
+        (list '+ +) (list '- -) (list '* *) (list '/ /) (list '> >) (list '< <)
         (list '= =) (list '> >) (list '< <) (list '>= >=) (list '<= <=)
         (list 'remainder remainder) (list 'modulo modulo) (list 'quotient quotient)
         (list 'abs abs) (list 'inc inc) (list 'dec dec)
