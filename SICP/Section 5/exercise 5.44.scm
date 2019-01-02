@@ -1,0 +1,42 @@
+#lang sicp
+(define (spread-arguments args cmpl-tm-env)
+  (let ((operand1 (first-operand args))
+        (operand2 (first-operand (rest-operands args))))
+    (let ((code1 (compile operand1 'arg1 'next cmpl-tm-env))
+          (code2 (compile operand2 'arg2 'next cmpl-tm-env)))
+      (preserving '(env)
+                  code1
+                  (append-instruction-sequences (if (modifies-register? code2 'arg1)
+                                                    (append-instruction-sequences (make-instruction-sequence '(arg1)
+                                                                                                             '()
+                                                                                                             '((save arg1)))
+                                                                                  code2
+                                                                                  (make-instruction-sequence '()
+                                                                                                             '(arg1)
+                                                                                                             '((restore arg1))))
+                                                    code2))))))
+
+(define (open-code? exp cmpl-tm-env)
+  (and (memq (car exp) '(+ - * /))
+       (eq? (find-variable (operator exp) cmpl-tm-env) 'not-found)))
+
+(define (compile-open-code exp target linkage cmpl-tm-env)
+  (let ((op (operator exp))
+        (args (operands exp)))
+    (cond ((last-operand? args) (make-instruction-sequence '()
+                                                           '(val)
+                                                           `((assign ,target (const ,(car args))))))
+          ((= (length args) 2) (end-with-linkage linkage
+                                                 (append-instruction-sequences (spread-arguments args cmpl-tm-env)
+                                                                               (make-instruction-sequence '(arg1 arg2)
+                                                                                                          (list target)
+                                                                                                          `((assign ,target (op ,op) (reg arg1) (reg arg2)))))))
+          ((and (> (length args) 2) (memq op '(+ *))) (end-with-linkage linkage
+                                                                        (preserving '(env)
+                                                                                    (compile (first-operand args) 'arg1 'next)
+                                                                                    (preserving '(arg1)
+                                                                                                (compile-open-code (append (list op) (rest-operands args)) 'arg2 linkage cmpl-tm-env)
+                                                                                                (make-instruction-sequence '(arg1 arg2)
+                                                                                                                           (list target)
+                                                                                                                           `((assign ,target (op ,op) (reg arg1) (reg arg2))))))))
+          (else (error "Invalid operands -- COMPILE-OPEN-CODE" args)))))

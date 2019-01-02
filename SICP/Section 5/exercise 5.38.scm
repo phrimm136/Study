@@ -116,7 +116,7 @@ after-lambda2
   (let ((op (operator exp))
         (args (operands exp)))
     (cond ((last-operand? args) (make-instruction-sequence '()
-                                                           '(arg2)
+                                                           '(val)
                                                            `((assign ,target (const ,(car args))))))
           ((= (length args) 2) (end-with-linkage linkage
                                                  (append-instruction-sequences (spread-arguments args)

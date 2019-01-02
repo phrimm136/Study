@@ -716,7 +716,9 @@
                                                              `(,proc-entry
                                                                (assign env (op compiled-procedure-env) (reg proc))
                                                                (assign env (op extend-environment) (const ,formals) (reg argl) (reg env))))
-                                  (compile-sequence (lambda-body exp) 'val 'return))))
+                                  (compile-sequence (lambda-body exp)
+                                                    'val
+                                                    'return))))
 (define (make-compiled-procedure entry env)
   (list 'compiled-procedure entry env))
 (define (compiled-procedure? proc)

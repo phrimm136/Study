@@ -34,7 +34,7 @@
     (define (initial-variables variables)
       (if (null? variables)
           nil
-          (cons (list (car variables) ''*unassigned*) ; Double quoting is very important
+          (cons (list (car variables) ''*unassigned*) ; It needs double quoting.
                 (initial-variables (cdr variables)))))
     (define (set-variables! variables values)
       (if (null? variables)
