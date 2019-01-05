@@ -39,7 +39,7 @@
                               '()
                               (cons (proc (car items))
                                     (map proc (cdr items)))))
-                        (define (apply-in-underlying-scheme apply)
+                        (define (apply-in-underlying-scheme apply))
                         (define (evaln exp env)
                           (cond ((self-evaluating? exp) exp)
                                 ((variable? exp) (lookup-variable-value exp env))
