@@ -9,8 +9,8 @@ int main(void)
 	{
 		while ((ch = getc(fp)) != EOF)
 			putchar(ch);
+		fclose(fp);
 	}
-	fclose(fp);
 	
 	return 0;
 }
