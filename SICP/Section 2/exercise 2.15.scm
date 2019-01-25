@@ -35,12 +35,11 @@
                                 (div-interval one r2)))))
 
 (div-interval (make-center-percent 50 0.1) (make-center-percent 50 0.1))
-(div-interval (make-center-percent 50 0.) (make-center-percent 20 0.2))
+(div-interval (make-center-percent 50 0) (make-center-percent 20 0.2))
 (percent (div-interval (make-center-percent 50 0.1) (make-center-percent 50 0.1))) ; error bound doubled
-(percent (div-interval (make-center-percent 50 0.) (make-center-percent 20 0.2)))
+(percent (div-interval (make-center-percent 50 0) (make-center-percent 20 0.2)))
 (percent (par1 (make-center-percent 50 0.1) (make-center-percent 20 0.2)))
-(percent (par2 (make-center-percent 0.5 0.1) (make-center-percent 0.2 0.2)))
+(percent (par2 (make-center-percent 50 0.1) (make-center-percent 20 0.2)))
 
-; In par1, there are three arithmetics on R_1 and R_2 which produce independent error bounds
-; and increases the whole error bound (dependency problem)
-; So Eva is right
+; In par1, R_1 and R_2 appear twice, which produce independent error bounds and increase the whole error bound(dependency problem in interval arithmetic).
+; So Eva is right.
