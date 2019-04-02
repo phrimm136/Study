@@ -1,0 +1,48 @@
+Q.
+
+a. Formally define, using tree terminology: X and Y are kth cousins, where k is a nonnegative integer.
+
+b. Repeat part (a) for the notion of "kth cousins removed r" (for example, "second cousins twice removed").
+
+c. Write an algorithm that takes as arguments the root of a tree and two nodes of that tree, and determines numbers k and r such that
+the two nodes are kth cousins removed r.
+
+A.
+
+a.
+
+If X and Y have different parent and are in the same depth, X and Y are kth cousins.
+
+b.
+
+If X and Y have different parent and are in the different depth, they are kth cousins removed r.
+
+c.
+
+function FindCousins(pointer root, X, Y): integer
+{Find k and r when X and Y are kth cousins removed r}
+    if Depth(X) <= Depth(Y) then
+        r <- Depth(Y) - Depth(X)
+	for i from 1 to r do
+	    Parent(Y)
+    else
+        r <- Depth(X) - Depth(Y)
+	for i from 1 to r do
+	    Parent(X)
+	    k <- 0
+    if not IsSibling(root, X, Y) then
+        while Parent(X) != Parent(Y)
+	    X <- Parent(X)
+	    Y <- Parent(Y)
+	    k < k + 1
+    return k, r
+
+function IsSibling(pointer root, X, Y): boolean
+{Check if X and Y are sibling}
+    if root = nullptr then
+        return false
+    return (LeftChild(root) = X and RightChild(root) = Y) or
+           (LeftChild(root) = Y and Rightchild(root) = X) or
+	   IsSibling(Leftchild(root), X, Y) or
+	   IsSibling(Rightchild(root), X, Y)
+    

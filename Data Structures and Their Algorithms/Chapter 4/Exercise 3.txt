@@ -1,0 +1,8 @@
+Q.
+
+Let T_1,...,T_k be trees with heights h_1,...,h_k and let T be a new tree formed from them in accordance with rule (2) on page 98.
+What is the height of tree T?
+
+A.
+
+max(h_1,...,h_k) + 1

@@ -1,0 +1,8 @@
+Q.
+
+What is the length of the longest path on which node v lies, in terms of its height and depth?
+
+A.
+
+height (To the root) + height+depth (The deeptest node from the root, whose height is height and depth of the node v)
+= 2*height + depth

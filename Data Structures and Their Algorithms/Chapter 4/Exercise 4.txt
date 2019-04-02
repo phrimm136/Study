@@ -1,0 +1,10 @@
+Q.
+
+The 'fan-out' of a tree node is the number of its children, and the 'fan-out' of a tree is the maximum fan-out of its nodes.
+State an upper bound on the number of nodes in a tree, in terms of its fan-out and height.
+Conversely, state a lower bound on the height of a tree, in terms of its fan-out and the number of nodes it contains.
+
+A.
+
+upper bound of nodes: (fan-out) ^ (height)
+lower bound of height: ceil(log_(fan-out) (number of nodes))
