@@ -1,0 +1,9 @@
+Q.
+
+A deque (pronounce "deck") or double-ended queue is a list abstract data type such that both additions and deletions can be made at both ends.
+Present representations of deques in both contiguous and linked memory.
+
+A.
+
+In contiguous memory, the first and the nth pointers of deque will operate push/pop.
+In linked memory, it should be implemented with a double linked list for deque(To be refered by those pointers). The other is same as the contiguous version.

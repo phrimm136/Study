@@ -1,0 +1,14 @@
+Q.
+
+Write the procedure SinglyLinkedDelete that complements procedure
+SinglyLinkedlnsert of Algorithm 1.1 on page 8. It should take as its
+argument a pointer P and should delete the cell just after the one to
+which P points. Be sure to handle the possible error condition in
+some appropriate way.
+
+A.
+
+procedure Singlylinkeddelete(pointer P):
+{Delete the cell after the one to which P points}
+    if Next(P) != nullptr then
+        Next(P) <- Next(Next(P))

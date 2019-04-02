@@ -1,0 +1,12 @@
+Q.
+
+Show that for any integer n > 0, the length of the binary notation for n is floor(lg n) + 1.
+
+A.
+
+To convert a digit to binary, we should halve the digit by 2 until it becomes less than 2.
+This mean that the length of digit is proportional to lg n.
+Exactly, lg n = k`+c. (|c| < 1, k` is integer)
+Since k`+c < k`+1 and length is integer and length is integer, it is reasonable to flooring k`+c.
+Binary notation start from 2^0, so we need to add one to denote binary notation for n.
+So the lenfth of the binary notation for n is floor(k`+c)+1 = floor(lg n)+1.

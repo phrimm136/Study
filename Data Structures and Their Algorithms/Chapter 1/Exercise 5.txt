@@ -1,0 +1,16 @@
+Q.
+
+There are two basic kinds of Froobs, fragrant and frumious. Fragrant
+Froobs come in 35 varieties, each of which can be found in four
+different colors; frumious Froobs come in another 17 varieties, each
+of which can be found in fifteen different colors. Devise an encoding
+of Froobs in as few bits as possible so that it is easy to tell, by
+using ordinary computer operations, whether a Froob is fragrant or
+frumious, and what its variety and color are.
+
+A.
+
+Set the first bit to tell whether a Froob is fragrant or frumious.
+In fragrant, varieties need 35 patterns and colors need 4 patterns, so the possible patterns are 35x4=120. So fragrant need 8 bits, a bit for what kinds of a Froob is, and the rest bits for the patterns.
+In frumious, varietes need 17 patterns and colors need 15 patterns, so the posible pattens are 17x15=255. So frumious need 9 bits, a bit for what kinds of a Froob is, and the rest bits for the patterns.
+For consistency, A Froob needs 9 bits. 

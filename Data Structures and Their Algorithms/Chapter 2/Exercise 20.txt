@@ -1,0 +1,17 @@
+Q.
+
+Let T(n) be the running time of Puzzle(n). Find the order of T.
+
+procedure Puzzle(integer n):
+    for i from 1 to n do
+        for j from 1 to 10 do
+            for k from n to n + 5 do x <- x + 1
+
+A.
+
+For each (i,j), assignment is performed 5 times.
+
+T(n) = sigma i from 1 to n (sigma j from 1 to 10 5)
+     = sigma i from 1 to n 275
+     = 275n
+So lim n->inf |T(n)/n| = 275, which means that T ∈ Θ(n).

@@ -1,0 +1,29 @@
+Q.
+
+A 'run' in a list L = (xo,. .., x_n-1) is a pair of indices (i, j), i < j, such that x_i = x_i+1, = ... = x_j.
+A 'run-length encoding' of L represents L as a table A[O..k - 1] of records with two fields, Count and Value;
+if (i_0, i_1 - 1), (i_1, i_2 - 1), ... , (i_k-i, i_k - 1) are runs of L, with i_0 = 0 and i_k = n,
+then L is represented by setting Count(A[j]) = i_j+1 - i_j and Value(A[j]) = x_i_j for 0 <= j < k.
+
+a. Give an algorithm for Access(L, i) with this representation.
+
+b. Give necessary and sufficient conditions for this representation to use less memory than the ordinary contiguous-memory representation of L.
+(Assume that the Count field is C bits, and the Value field is V bits.)
+
+A.
+
+a.
+
+function AccessRun(pointer L, key i): key
+{Access i_th element of list with 'run' representation}
+    A[0..l-1] <- RunEncode(L)
+    S <- 0
+    for j from 0 to k-1 do
+        S <- S + Count(A[j])
+        if i < S then
+	    return Value(A[j])
+
+b.
+
+The 'Value' field has V bits same as elements of list. The 'Count' field has C bits at most floor(log_2(n)+1).
+So j is larger than V/(V+C)n = Vn/(V+floor(log_2(n)+1)) if and only if 'run' representation uses less memory.

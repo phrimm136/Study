@@ -1,0 +1,10 @@
+Q.
+
+Why does the clever multiplication algorithm switch to a nonrecursive
+method to multiply integers of three or fewer bits?
+What happens if line (1) is replaced by "if n < 2 ..."?
+
+A.
+
+If the clever multiplication uses recursive method when n = 3, P3 can have 3 bits, which causes furthur recursion.
+if line (1) is placed by "if n < 2", the clever multiplication becomes taking twice time of gradeschoolmultiplication.

@@ -1,0 +1,16 @@
+Q.
+
+Prove the Exponentials, Powers, and Logarithms Theorem.
+(Hint: To show that any exponential function dominates any simple power,
+let f(x) = c^x and g(x) = x^a, where c > 1 and a > 0. Apply L'Hopital's rule repeatedly)
+
+A.
+
+I guess it is asking about relation of them.
+
+By definition, Exponentials ans Logarithms are inverse.
+
+Derivative of c^x is c^x, and derivative of x^a is a*x^(a-1).
+With L'Hopital's rule, lim x->inf c^x/x^a = lim x-> c^x/a! = inf, so c^x > x^a, where c > 1 and a > 0.
+
+So O(c^x) > O(x^a) > O(log(x)).

@@ -1,0 +1,16 @@
+Q.
+
+Let T(n) be the running time of Peculiar(n). Find the order of T.
+
+procedure Peculiar(integer n):
+    for i <- 1 to n do
+        if i is odd then
+            for j from i to n do x <- x + 1
+            for j from 1 to i do y <- y + 1
+
+A.
+
+For each odd i (n/2), assignment is performed n-i times,
+and for each even i (n/2), assignment is performed i times.
+T(n) = (sigma i from 1 to n/2 n-i) + (sigma j from 1 to n/2 i) = n^2/2
+So lim n->inf |T(n)/n^2| = 1/2, which means that T ∈ Θ(n^2).

@@ -1,0 +1,12 @@
+Q.
+
+Describe the implementation of two stacks in a single table, in the
+style used on page 75 to describe the implementation of the stack
+operations for a single stack in contiguous memory.
+
+A.
+
+Let two stacks L1 = <x_i, x_2, ... x_i>, L2 = <y_1, y_2, ..., y_j> which i+j = n.
+The bottom stack element of L1 is at A[0] and top element is at A[i-1].
+Similarily, the bottom stack element of L2 is at A[n-1] and top element is at A[i]=A[n-j].
+To keep track of size of them, we initialize length variables to 0 and in/decrement them when push/pop is operated instead of getting the length value from Length function.

@@ -1,0 +1,8 @@
+Q.
+
+Find the smallest input m such that the value of n exceeds 100 during
+the execution of Algorithm 2.1 on page 48.
+
+A.
+
+15 -> 46 -> 23 -> 70 -> 35 -> 105

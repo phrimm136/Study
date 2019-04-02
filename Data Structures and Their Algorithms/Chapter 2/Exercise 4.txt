@@ -1,0 +1,74 @@
+Q.
+
+a. Write the grade school algorithm for the addition of two nonnegative integers in binary notation.
+The algorithm should take as arguments two tables of bits, not necessarily of the same length,
+and return a table of bits one longer than the length of its longer input.
+
+b. Show that this algorithm runs in time linear in the length of the longer of its arguments.
+
+c. Repeat parts (a) and (b) for subtraction of two integers.
+Assume that the value of the first argument is greater than or equal to the
+value of the second argument, so that there is no possibility of producing a negative answer.
+
+d. Write the procedure Accum(A[O..m-1], B[0..n-1]),
+which adds the value represented by A into the table B.
+(You may assume that n > m and that overflow is impossible.)
+
+A.
+
+a.
+
+function BinaryAdd(table B1[0..n-1], table B2[0..m-1]): table
+{Add two binary tables and return the result}
+    C <- 0
+    S <- 0
+    if n-1 > m-1 then
+        Ltable <- B1
+	Stable <- B2
+    else
+        Ltable <- B2
+	Stable <- B1
+    for i from 0 to min(n-1, m-1) do
+        S <- Ltable[i] + Stable[i] + C
+	sum[i] <- S % 2
+	C <- S / 2
+    for i from o to min(n, m) do
+        S <- Ltable[i] + C
+	sum[i] <- S % 2
+	c <- S / 2
+    return sum
+
+b.
+
+Comparing the longer table takes constant time.
+Adding Stable to Ltable takes k_1*min(n-1,m-1) and assigning the rest elements of Ltable takes k_2*(max(n-1,m-1) - min(n-1,m-1)) time.
+The sum of time is C + k_2*max(n-1,m-1) + (k_1-k_2)*min(n-1,m-2), but n-1 and m-2 is linear, so this algorithm runs in time linear in the length of the longer of its arguments.
+
+c.
+
+function BinarySub(table B1[0..n-1, tableB2[0..m-1]): table
+{Substract two binary tables and return the result. B1 is always larger than B2.}
+    D <- 0
+    diff[m..n-1] <- B1[m..n-1]
+    for i from n-1 to m do
+        D <- B1[i]
+    for i from m-1 to 0 do
+        D <- B1[i] - B2[i]
+    for i from 0 to n-1 do
+        if diff[i] < 0 then
+	    diff[i+1] = doff[i+1] - 1
+	    diff[i] = diff[i] + 2
+    return diff
+
+Assigning the longer part to diff takes k_1*(n-m) time, and substracting two tables takes k_2(m) time.
+So the total time is k_1*n + (k_2-k_1)*m, which is linear in the length of the longer of its arguments.
+
+d.
+
+procedure BinaryAccum(table A[0..m-1], table B[0..n-1]):
+{Add the value represented by A into B. B is always longer than A}
+    for i from 1 to m-1 do
+        B[i] <- A[i] + B[i]
+	if B[i] > 1 then
+	    B[i+1] = B2[i+1] + 1
+	    B[i] = B[i] - 2

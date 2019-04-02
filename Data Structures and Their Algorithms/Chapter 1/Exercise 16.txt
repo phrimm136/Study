@@ -1,0 +1,8 @@
+Q.
+
+How would you convert binary logarithms to natural logarithms?
+
+A.
+
+Set binary logarithm to lg n, which is equal to ln n / ln 2.
+To convert lg n to natural logarithm, just multiply ln 2.

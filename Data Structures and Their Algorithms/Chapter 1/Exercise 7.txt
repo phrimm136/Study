@@ -1,0 +1,31 @@
+Q.
+
+a. Write a procedure Append that adds a new element to the end
+of a linked list represented as in Figure 1.4 on page 6. The call
+Append(K, list) should create a new record with key value K and
+add it just after the last element in list. You may use the procedure
+NewNode of Algorithm 1.4 on page 12, and use of a locative will
+be handy.
+
+b. Write the same procedure without locatives. Append should now
+take only one argument, and may refer to list as a global variable
+(in case list has no elements).
+
+A.
+
+a.
+
+procedure Append(key K, locative list):
+{Add a new element to the end of the linked list}
+    while Next(list) != nullptr do
+        list <- Next(list)
+    Next(list) <= NewNode(K, nullptr)
+
+b.
+
+procedure Append(key K):
+{Add a new element to the end of the linked list}
+    P <- list
+    while Next(P) != nullptr do
+        P <- Next(P)
+    Next(P) <- NewNode(K, nullptr)

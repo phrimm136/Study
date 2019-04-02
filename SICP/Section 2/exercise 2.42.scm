@@ -1,4 +1,4 @@
-#lang sicp
+(define nil '())
 (define (filter predicate sequence)
   (cond ((null? sequence) nil)
         ((predicate (car sequence))
@@ -75,4 +75,4 @@
         (iter first)
         (display-maps rests))))
 
-(display-maps (queens 4))
+(display-maps (queens 8))

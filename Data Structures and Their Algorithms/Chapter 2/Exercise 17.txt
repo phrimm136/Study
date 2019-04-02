@@ -1,0 +1,15 @@
+Q.
+
+Let T(n) be the running time of Mystery(n). Find the order of T.
+
+procedure Mystery(integer n):
+    for i from 1 to n - 1 do
+        for j from i + 1 to n do
+            for k from 1 to j do x <- x + 1
+
+A.
+
+T(n) = sigma i from 1 to n-1 (sigma j from i+1 to n j)
+     = sigma i from 1 to n-1 (n(n+1)/2 - (i(i+1)/2))
+     = n^2(n-1)/2 - (n-1)n(2n-1)/12 - n(n-1)/4
+So lim n->inf |T(n)/n^3| = 1/3, which means that T ∈ Θ(n^3).

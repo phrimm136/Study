@@ -1,0 +1,11 @@
+Q.
+
+We said that algorithm (B) is slightly more intelligent than algorithm (A).
+For exactly which words K does algorithm (B) compare fewer pairs of words than algorithm (A)?
+
+A.
+
+Suppose that the word K is not in the table T.
+In algorithm (A), we should run algorithm until the end of table reaches.
+But in algorithm (B), there are words which comes later than K in sorted table.
+It this case, the algorithm (B) compares fewer pairs of words than (A).

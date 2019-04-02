@@ -1,0 +1,25 @@
+Q.
+
+Show that if n-bit numbers x and y are split into 3 parts x_L, x_M, x_R and y_L, y_M, y_R,
+the product x * y can be computed with the aid of the 5 recursive products
+x_L*y_L, and (x_L+e*x_M+x_R)*(y_L+e*y_M+y_R) and (x_L+e*2x_M+4x_R)*(y_L+e*2y_M+4y_R) for e = ±1.
+What is the time complexity of the resulting algorithm?
+
+A.
+
+Thanks to https://gmplib.org/manual/Toom-3_002dWay-Multiplication.html.
+
+Make polynomials x_R*t^2 + x_M*t + x_L and y_R*t^2 + y_M*t + y_L with parts, and multiply them.
+Then the result is
+(x_R*y_R)t^4+(x_R*y_M + x_M*y_R)t^3+(x_R*y_L + x_M*y_M + x_L*y_R)t^2+(x_M*y_L + x_L*y_M)t+x_L*y_L.
+To get coefficients, we need 5 points to determine 5 undetermined coefficients.
+Put t={0, 1, -1, 2, -2} in the polynomial and the results are
+x_L*y_L when t = 0
+(x_L+x_M+x_R)*(y_L+y_M+y_R) when t = 1
+(x_L-x_M+x_R)*(y_L-y_M+y_R) when t = -1
+(x_L+2x_M+4x_R)*(y_L+2y_M+4y_R) when t = 2
+(x_L-2x_M+4X_R)*(y_L-2y_M+4y_R) when t = -2
+
+If we set a function T(n) for this algorithm,
+T(n) <= 5T(ceil(n/3)+1) + c'n if n > n_0 and T(n) <= c if n < n_0.
+By the divide-conquer theorem, the time complexity of this algorithm is O(n^log_3(5)).

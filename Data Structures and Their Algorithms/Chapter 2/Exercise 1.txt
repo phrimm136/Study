@@ -1,0 +1,14 @@
+Q.
+
+For what numbers less than 1000 does the test (1) on page 47 give the wrong answer?
+
+A.
+
+25 is square of 5(3 bits), which is larger than 2.5 bits.
+121 is square of 11(4 bits), which is larger than 3.5 bits.
+289 is square of 17(5 bits), which is larger than 4.5 bits.
+323 can be divided by 17(5 bits) and 19(5 bits), which are larger than 4.5 bits.
+361 is square of 19(5 bits), which is larger than 4.5 bits.
+391 can be divided by 17(5 bits) and 23(5 bits), which are larger than 4.5 bits.
+437 can be divided by 19(5 bits) and 23(5 bits), which are larger than 4.5 bits.
+493 can be divided by 17(5 bits) and 29(5 bits), which are larger than 4.5 bits.

@@ -1,0 +1,95 @@
+Q.
+
+This problem concerns calculation of the greatest common divisor
+gcd(m, n) of two positive integers m and n, that is, the largest number that divides both evenly.
+For example, gcd(28, 42) = 14. We consider algorithms that take the numbers m and n themselves
+a inputs (rather than tables representing thebinary notations ofthese numbers).
+
+a. The simplest approach to finding the greatest common divisor is simply to search for it,
+starting from the smaller of m and n and counting down.
+Write this algorithm, and analyze its time complexity.
+
+b. A better method, called Euclid's algorithm, has been known since antiquity (Algorithm 2.4).
+Trace the operationf Euclid's algorithm on inputs 28 and 42;
+on inputs 200 and 99; and on inputs 111 and 191.
+
+c. Show that if Euclid's algorithm terminates, it must produce the true greatest common divisor.
+(Hint: Show that each iteration of the loop does not change gcd(a, b).)
+
+d. Show that Euclid's algorithm terminates, by showing that the value of b decreases on each iteration.
+
+e. Part (d) shows that Euclid's algorithm runs in time 0(n),
+but in fact it terminates much more quickly than that, as the examples of part (b) suggest.
+Show that in fact the algorithm terminates in time logarithmic in the smaller of its arguments.
+(Hint: Show that if a_0, b_0 and a_1, b_1, are the values of a and b on two successive iterations of the loop and a_0 > b_0, then either a_1 < 2/3a_0 or b_1 < 2/3b_0.)
+
+f. Give as exact a formula as you can for the running time of Euclid's algorithm,
+in terms of constants representing thetime required to execute each of the five lines of Algorithm 2.4.
+
+function Euclid(integer m, n): integer
+{Return greatest common divisor of positive values of m and n}
+    a <- m
+    b <- n
+    while b != 0 do
+        (a, b) <- (b, a % b)
+    return a
+
+A.
+
+a.
+
+Function GCD(integer m, n): integer
+{Return greatest common divisor of positive values of m and n}
+    for i from 1 to min(m,n) do
+        if m % i = 0 and n % i = 0 then
+	    gcd <- i
+    return gcd
+
+b.
+
+28 42   200 99   111 191
+42 28    99  2   191 111
+28 14    2   1   111  80
+14  0    1   0    80  31
+                  31  18
+                  18  13
+		  13   5
+		   5   3
+                   3   2
+		   2   1
+		   1   0
+-------------------------
+  14       1         1
+
+c.
+
+Praise wikipedia.
+
+r_(n-2) = q_n*r_(n-1), since r_n is zero. r_(n-1) divides r_(n-2).
+r_(n-3) = q_(n-1)*r_(n-2) + r_(n-1). r_(n-1) also divides r_(n-3) because it divides both terms on the right-side of the equation.
+Iterating the same argument, r_(n-1) divides a and b, which means r_(n-1) is less than or equal to greatest common divisor g.
+Let a = mc and b = nc, then a = bk_0 + r_0 <=> r_0 = c(m-n*k_0), which means that c can divide r_0.
+C also can divide any other remainders with the analogous argument.
+Therefore, greatest common divisor g must divide r_(n-1), which is less than or equal to g.
+So g = r_(n-1) = gcd(a,b)
+
+d.
+
+Since r_n = r_(n-2) - r_(n-1)*k_(n-1) and a = b*k_0 + r_0 (let b r_-1) when k_n > 0 and r_n > 0,
+the value of b decreases to 0, and Euclid's method can terminate.
+
+e.
+
+By the definition, a_0 > b_0.
+Let a_0 = mc, b_0 = nc, then a_1 = nc, b_1 = c(m-n*k_0).
+a_1/a_0 = n/m and b_1/b_0 = m/n - k_0.
+If a_1/a_0 >= 2/3, then m/n <= 3/2 and k_0 = 1, so b_1/b_0 <= 1/2.
+If b_1/b_0 >= 2/3, then m/n >= 2/3 + k_0 and n/m <= 1/(2/3 + k_0) (k_0 >= 1), so a_1/a_0 < 2/3.
+so gcd(a_0,b_0) = gcd(2/3a_0,2/3b_0) = ..., T(gcd(a,b)) = O(log(n)).
+
+f.
+
+a <- m and b <- n takes time k.
+b != 0 and (a, b) <- (b, a % b) takes time log(n)
+return a takes time k`.
+So, the running time of Euclidean algorithm takes 2log(n) + 2k + k` time.

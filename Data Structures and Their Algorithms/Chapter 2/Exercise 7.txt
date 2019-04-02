@@ -1,0 +1,41 @@
+Q.
+
+Rewrite the grade school multiplication algorithm so that it takes as
+arguments two integers of different sizes, say m and n bits.
+Try to make the algorithm asefficient as possible;
+what is the order of the time complexity of your version, as a function of m and n?
+
+A.
+
+       11001 25
+     x  1110 14
+------------
+       00000
+      11001
+     11001
+    11001
+------------
+   101011110 350
+
+
+function GradeSchoolMult2(table X[0..m-1], table Y[0..n-1]): table
+{Multiplication of two nonnegative binary numerals X and Y of n, m bits, respectively}
+{The result Z is a table of length m+n}
+    S <- 0
+    if m > n then
+        Ltable <- X
+	Llen <- m
+	Stable <- Y
+	Slen <- n
+    else
+        Ltable <- Y
+	Llen <- n
+	Stable <- X
+	Slen <- m
+    for j from 0 to Llen+Slen-1 do
+        for i from 0 to Slen-1 do
+            if 0 <= j-i <= Slen-1 and then
+                S <- S + Ltable[i] * Rtable[j-i]
+        Z[j] <- S % 2
+        S <- floor(S/2)
+    return Z

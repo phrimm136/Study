@@ -1,0 +1,15 @@
+Q.
+
+In Figure 4.1 on page 97, consider Mammalia (the mammals).  What are
+the parent, children, siblings, descendants, ancestors, height, and
+depth of this node?
+
+A.
+
+Parent: Vertebrata
+Children: Cetacea, Tubulidendata, Primates, Chiroptera
+Siblings: Reptilia, Amphibia, Agnatha, Aves
+Descendatns: Cetacea, Tubulidendata, Primates, Chiroptera, Lemuridae, Tupaiidae, Hominidae
+Ancestors: Vertebrata, Chordata, Metazoa, ANIMALIA
+Height: 2
+Depth: 4

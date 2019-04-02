@@ -1,0 +1,15 @@
+Q.
+
+Carefully derive Equation (4) on page 55 from Equations (2) and (3) and the Big-O Theorem.
+
+A.
+
+T_Clever(n) ∈ o(T_GradeSchool(n)) (4)
+
+T_GradeSchool(n) ∈ Θ(n^2) <=> 0 < abs(lim n->inf T_GradeSchool(n)/n^2) < inf (2)
+T_Clever(n) ∈ O(n^log_2(3)) <=> abs(lim n->inf T_Clever(n)/n^log_2(3)) < inf (3)
+
+In abs(lim n->inf T_Clever(n)/T_GradeSchool(n)),
+0 < abs(lim n->inf T_GradeSchool(n)/n^2) < inf, so T_gradeSchool(n) should be ax^2+bx+c.
+Similarly, abs(lim n->inf T_Clever(n)/n^log_2(3)) < inf, T_Clever(n) should not be larger than kn^log_2(3).
+Therefore, abs(lim n->inf T_Clever(n)/T_GradeSchool(n)) = 0, which is equal to T_Clever(n) ∈ o(T_GradeSchool(n)).

@@ -1,0 +1,14 @@
+Q.
+
+Let T(n) be the running time of Foo(n). Find the order of T.
+
+procedure Foo(integer n):
+    for i from 1 to n do
+        x <- n
+        while x > 0 do
+            x <- x - i
+
+A.
+
+For each i, assignment in while loop performed i times.
+T(n) = sigma i from 1 to n i = n(n+1)/2, so lim n->inf |T/n^2| = 1/2, which means that T ∈ Θ(n^2).

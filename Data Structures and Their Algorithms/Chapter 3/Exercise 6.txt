@@ -1,0 +1,26 @@
+Q.
+
+A pseudo-random number generator is a function of no arguments that returns, when called repeatedly,
+a sequence of values that appears to be random and uniformly distributed over a range {0, ..., N - 1}.
+(The value of N is typically 2^k, where k is the computer word length in bits; N = 2^32, for example.)
+In particular, a lagged Fibonacci generator for the range {O, ..., N - 1} returns the values x_n = (x_(n-r) + x_(n-s)) mod N, where r and s are integer constants of the algorithm (0 < r < 9) and the initial "seed" values x_0, ..., x_(s-1) are determined in some other way.
+(The values r = 5 and s = 17 are recommended, because they result in a sequence x_0, x_1, ... that does not repeat a value for a very long time.)
+Explain how to implement a lagged Fibonacci generator using list abstract data types.
+What representation would be most appropriate?
+
+A.
+
+function Random(pointer L,integer r, integer s, integer n): integer
+{Make a random number with a lagged Fibonacci generator}
+    for i from s to n do
+        S <- 0
+        for j from 0 to s-1
+	    tmp <- deque(L)
+	    if j = i-r or j = i-s then
+	        S <- S + tmp
+	    enque(tmp)
+	S <- S % (2 ^ 32)
+	enque(S)
+    return S
+
+Looks like that queue is most appropriate.

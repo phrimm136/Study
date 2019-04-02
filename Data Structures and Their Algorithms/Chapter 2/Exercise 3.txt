@@ -1,0 +1,22 @@
+Q.
+
+a. For what values of n, if any, is it true that every product of two
+n-bit integers is an integer of fewer than 2n bits?
+
+b. For what values of m and n, if any, is it true that every product of
+an m-bit integer and an n-bit integer is an integer of fewer than
+m + n bits?
+
+A.
+
+a.
+
+With n bits, the largest number is 2^n-1.
+When we sqaure the largest number 2^n-1, we get 2^2n - 2*2^n + 1, which is fewer than 2^2n.
+So every product of two n-bit integers is and integer of fewer than 2n bits.
+
+b.
+
+With n bits and m bits, the largest number is 2^n-1 and 2^m-1. respectively.
+When we product those largest number, we get 2^(n+m) - 2^n*2^m + 1, which is fewer than 2^(n+m).
+So every product of an m-bit integer and an n-bit integer is an integer of fewer than m + n bits.

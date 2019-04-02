@@ -1,0 +1,29 @@
+Q.
+
+This problem continues Problem 11 on algorithms for finding the greatest common divisor.
+Define a smod b to be the integer r with the smallest absolute value such that a - r is divisible by b.
+For example, 10 smod 3 = 1O mod 3 = 1, but 11 smod 3 = -1.
+Show that if we replace "mod" with "smod" in Euclid's algorithm,
+the algorithm still terminates and correctly computes the greatest common divisor.
+Determine the running time of this modified Euclid's algorithm.
+
+A.
+
+function smod(integer a, b): integer
+{Return smallest absolute value r such that a - r is divisible by b}
+    r <- a
+    while d > b do
+        r <- r - b
+    return r
+
+function Euclid(integer a, b): integer
+{Return greatest common divisor of positive integer a and b}
+    a <- m
+    b <- n
+    while b != 0 do
+        (a, b) <- (b, a smod b)
+    return a
+
+a smod b = r <=> (a-r_n) = b*k_n <=> r_n = a - b*k_n, so we can use smod to prove euclidean algorithm.
+
+running time of this modified algorithm is the same as the original one.

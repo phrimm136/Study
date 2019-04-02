@@ -1,0 +1,26 @@
+Q.
+
+Rewrite the grade school multiplication algorithm so that it works on decimal (base 10) integers.
+
+A.
+
+    99
+ *  99
+ -----
+    81
+   81
+   81
+  81
+ -----
+  9801
+
+function DecMult(table X[0..n-1], table Y[0..n-1]): table
+{Multiplication of two nonnegative decimal numerals X and Y of n digits}
+    S <- 0
+    for j from 0 to 2n-1 do
+        for i from 0 to n-1 do
+	    if 0 <= j-i <= n-1 then
+	        S <- S + X[i] + Y[j-i]
+	Z[j] <- S % 10
+	S <- floor(S / 10)
+    return Z

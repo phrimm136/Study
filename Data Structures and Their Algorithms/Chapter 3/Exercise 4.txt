@@ -1,0 +1,12 @@
+Q.
+
+Susan decides to implement a queue of maximum length N in a table of size N by keeping track of the positions of the first and last elements of the queue,
+rather than the position of the first element and the length of the queue; she figures this will save her some modular arithmetic and the code will be clearer.
+Unfortunately, she can't seem to get her code to work; why not? What alternatives will work correctly?
+
+A.
+
+During en/dequepe operations, the queue 'moves backward.'
+However, there is an end of the table so the queue have to go beyond the table someday, causing error like segmentation fault. We need to roll the queue.
+The alternatives is a circular list, the first element comes after the last element.
+But it also needs modulo arthmetic if she wants to implement an queue with the table. Sorry Susan.

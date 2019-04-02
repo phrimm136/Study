@@ -1,0 +1,17 @@
+Q.
+
+Let T(n) be the running time of Fum(n). Find the order of T (that is, find a function f(n) such that T ∈ Θ(f)).
+(Assume that real arithmetic is carried out exactly, and is not subject to floating-point roundoff errors.)
+
+procedure Fum(integer n):
+    for i from 1 to n do
+        d <- 1/i
+        x <- i
+        while x > 0 do
+            x <- x - d
+
+A.
+
+For each i, assignment in while loop is performed i^2 times.
+T(n) = sigma i from i to n i^2 = n(n+1)(2n+1)/6,
+so lim n->inf |T/n^3| = 1/6, which means that T ∈ Θ(n^3).

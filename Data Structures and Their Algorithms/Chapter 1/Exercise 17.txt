@@ -1,0 +1,20 @@
+Q.
+
+a. What is the relation between log_b(a) and log_a(b)?
+
+b. If a > b > 0, how does log_a(x) compare with log_b(x)?
+
+c. Let c > 0 and b > 1.
+   Show that there is a number d > 0 such that log_b(n+c) < log_b(n) + d for every n > 1.
+
+A.
+
+a. Since log_b(a) = ln(a)/ln(b) and log_a(b) = ln(b)/ln(a), they are reciprocal.
+
+b. Since log_a(x) = ln(x)/ln(a) and log_b(x) = ln(x)/ln(b),
+   so log_a(x) is less than log_b(x) since 1/ln(a) is less than 1/ln(b).
+
+c. log_b(n+c), log_b(n) + d <=> log_b((n+c)/n), d <=> (n+c)/n, b^d
+   Since n > 1, 1 < (n+c)/n < (1+c), and b > 1, b^d is increasing power function.
+   Therefore, the slope of b^d exceeds the slope of 1+c on some point A and after A, there is some point B that b^d exceeds 1+c.
+   So there is a number d > 0 such that log_b(n+c) < log_b(n) + d.

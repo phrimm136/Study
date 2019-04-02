@@ -1,0 +1,23 @@
+Q.
+
+It is not a simple matter to insert a new record into a cdr-coded list, since if we wish to insert a new record just after a SmallNode there may be no place to put the relevant information!
+To obviate this difficulty we create yet another type of node called a ForwardingAddress.
+(The Ntype field must now be expanded to two bits; we use F for the bit sequence identifying a ForwardingAddress.)
+Other than the Ntype field, each ForwardingAddress haexactly the same structure as a SmallNode-in particular, they are necessarily the same size in memory.
+The Info field of a ForwardingAddress N contains a pointer to another record, which is the record that really should be located at N's address.
+Any routine that encounters a pointer to N must retrieve Info(N) to find the "real" record;
+foresighted routines will update pointers to N to point to Info(N), thus speeding up the next access.
+Figure 3.7(d) illustrates how to use a ForwardingAddress to insert into a cdr-coded list.
+
+a. Write insertion and deletion routines for cdr-coded lists.
+
+b. Update the Access and CopyList routines written for Problem 7 to respect forwarding addresses.
+
+c. The Ntype field of each node is now two bits long, but only three of the four possible values are used.
+One possibility for a fourth type of node will permit us to save one more pointer in each list.
+Define this new node type and update the list-manipulation routines asnecessary.
+
+A.
+
+a.
+

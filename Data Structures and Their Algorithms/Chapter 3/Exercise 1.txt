@@ -1,0 +1,13 @@
+Q.
+
+Using abstract operations only, write a routine that takes as its argument a list of lists
+and returns the concatenation of all the component lists.
+
+A.
+
+function ConcatAll(table list[0..n-1]): pointer
+{Concatenate all lists in the table and return a pointer of the product}
+    C <- list[0]
+    for i from 1 to n-1 do
+        C <- Concat(C,list[i])
+    return C
