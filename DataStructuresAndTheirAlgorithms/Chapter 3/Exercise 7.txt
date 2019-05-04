@@ -23,11 +23,11 @@ function Acceess(pointer L, integer i): key
     curr <- L
     for x from 0 to i-1 do
         if curr = nullptr then
-	    return -1
+            return -1
 	else if Ntype(curr) = 1 then
-	    curr <- Next(curr)
+            curr <- Next(curr)
 	else
-	    curr <- curr + smallNodesize
+            curr <- curr + smallNodesize
     return Info(curr)
 
 b.
@@ -39,20 +39,20 @@ function CopyList(pointer L): pointer
     prev <- nullptr
     while p != nullptr do 
         if Ntype(p) = 1 then
-	    tmp <- NewCell(LargeNode)
-	    Ntype(tmp) <- 1
-	    Next(tmp) <- nullptr
-	else
-	    tmp <- NewCell(SmallNode)
-	    Ntype(tmp) <- 0
-	Info(tmp) <- Info(curr)
-	Ntype(tmp) <- Ntype(curr)
-	if prev = nullptr then
-	    p <- tmp
-	else if Ntype(prev) = 1 then
-	    Next(prev) <- tmp
+            tmp <- NewCell(LargeNode)
+            Ntype(tmp) <- 1
+            Next(tmp) <- nullptr
+        else
+            tmp <- NewCell(SmallNode)
+            Ntype(tmp) <- 0
+        Info(tmp) <- Info(curr)
+        Ntype(tmp) <- Ntype(curr)
+        if prev = nullptr then
+            p <- tmp
+        else if Ntype(prev) = 1 then
+            Next(prev) <- tmp
         prev <- p
-	if Ntype(curr) = 1
-	    curr <- Next(curr)
-	else
-	    curr <- curr + smallNodesize
+        if Ntype(curr) = 1
+            curr <- Next(curr)
+        else
+            curr <- curr + smallNodesize

@@ -1,0 +1,14 @@
+Q.
+
+Show that the harmonic numbers are unbounded; that is, show that for any x > 0 there is an n such that H_n > x.
+(Hint: Show that H_2^(k+1) - H_2^k > 1/2 for any k.)
+
+A.
+
+To show that H_2^(k+1) - H_2^k > 1/2, use induction.
+When k = 1, H_4 - H_2 = 1/3 + 1/4 = 7/12 > 1/2, equation holds.
+Let's assume that when k = n, the equation holds. Then, see if the equation holds when k = n+1.
+H_2^(n+2) - H_2^(n+1) has 2^(n+1) elements, which is larger than or equal to 1/2^(n+2).
+So H_2^(n+2) - H_2(n+1) = 1/(2^(n+1)+1) + ... 1/2^(n+2), which is always larger than 1/2.
+Thus equation holds.
+By this equation, H_n always increases, and is unbounded.

@@ -29,20 +29,11 @@ function FindCousins(pointer root, X, Y): integer
         r <- Depth(X) - Depth(Y)
 	for i from 1 to r do
 	    Parent(X)
-	    k <- 0
-    if not IsSibling(root, X, Y) then
-        while Parent(X) != Parent(Y)
-	    X <- Parent(X)
-	    Y <- Parent(Y)
-	    k < k + 1
+    k <- 0
+    while Parent(X) != Parent(Y)
+        if X = Y then
+	    break
+        X <- Parent(X)
+	Y <- Parent(Y)
+        k <- k + 1
     return k, r
-
-function IsSibling(pointer root, X, Y): boolean
-{Check if X and Y are sibling}
-    if root = nullptr then
-        return false
-    return (LeftChild(root) = X and RightChild(root) = Y) or
-           (LeftChild(root) = Y and Rightchild(root) = X) or
-	   IsSibling(Leftchild(root), X, Y) or
-	   IsSibling(Rightchild(root), X, Y)
-    

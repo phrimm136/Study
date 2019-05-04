@@ -21,7 +21,7 @@ function AccessRun(pointer L, key i): key
     for j from 0 to k-1 do
         S <- S + Count(A[j])
         if i < S then
-	    return Value(A[j])
+            return Value(A[j])
 
 b.
 

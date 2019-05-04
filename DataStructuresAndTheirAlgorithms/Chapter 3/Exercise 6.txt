@@ -15,12 +15,12 @@ function Random(pointer L,integer r, integer s, integer n): integer
     for i from s to n do
         S <- 0
         for j from 0 to s-1
-	    tmp <- deque(L)
-	    if j = i-r or j = i-s then
-	        S <- S + tmp
-	    enque(tmp)
-	S <- S % (2 ^ 32)
-	enque(S)
+            tmp <- deque(L)
+            if j = i-r or j = i-s then
+                S <- S + tmp
+            enque(tmp)
+        S <- S % (2 ^ 32)
+        enque(S)
     return S
 
 Looks like that queue is most appropriate.

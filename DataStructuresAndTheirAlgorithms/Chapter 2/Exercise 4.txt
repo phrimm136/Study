@@ -24,18 +24,18 @@ function BinaryAdd(table B1[0..n-1], table B2[0..m-1]): table
     S <- 0
     if n-1 > m-1 then
         Ltable <- B1
-	Stable <- B2
+        Stable <- B2
     else
         Ltable <- B2
-	Stable <- B1
+        Stable <- B1
     for i from 0 to min(n-1, m-1) do
         S <- Ltable[i] + Stable[i] + C
-	sum[i] <- S % 2
-	C <- S / 2
+        sum[i] <- S % 2
+        C <- S / 2
     for i from o to min(n, m) do
         S <- Ltable[i] + C
-	sum[i] <- S % 2
-	c <- S / 2
+        sum[i] <- S % 2
+        c <- S / 2
     return sum
 
 b.
@@ -56,8 +56,8 @@ function BinarySub(table B1[0..n-1, tableB2[0..m-1]): table
         D <- B1[i] - B2[i]
     for i from 0 to n-1 do
         if diff[i] < 0 then
-	    diff[i+1] = doff[i+1] - 1
-	    diff[i] = diff[i] + 2
+            diff[i+1] = doff[i+1] - 1
+            diff[i] = diff[i] + 2
     return diff
 
 Assigning the longer part to diff takes k_1*(n-m) time, and substracting two tables takes k_2(m) time.
@@ -69,6 +69,6 @@ procedure BinaryAccum(table A[0..m-1], table B[0..n-1]):
 {Add the value represented by A into B. B is always longer than A}
     for i from 1 to m-1 do
         B[i] <- A[i] + B[i]
-	if B[i] > 1 then
-	    B[i+1] = B2[i+1] + 1
-	    B[i] = B[i] - 2
+        if B[i] > 1 then
+            B[i+1] = B2[i+1] + 1
+            B[i] = B[i] - 2
