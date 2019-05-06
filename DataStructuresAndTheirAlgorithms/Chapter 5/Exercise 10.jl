@@ -22,7 +22,6 @@ function dealloc(M, addr)
                 if all(map(isnothing, M[i[1]][i[2]]))
                     M[i[1]][i[2]] = nothing
                     filter!(x->x != i, M)
-                    
                 end
             end
         end
