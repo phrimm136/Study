@@ -13,9 +13,9 @@ A.
 
 a.
 
-(n+k-1)C(k) elements. (0 <= i_1 <= i_2 <= ... <= i_k <= n-1)
+S(n, k) is number of nonzero elements contained in a k-dimensional upper-triangular matrix of order n, which is (sigma i from 1 to n S(i, k-1) in k > 2, n in k = 1), n is length of each axis and k is number of dimension.
 
 b.
 
-At i_1, i_2, ... , i_k (row-first order), append n - (i_1 + i_2 + ... + i_k) elements.
-To find index M[i_1, i_2, ..., i_k], unless i_1 <= i_2 <= ... <= i_k return 0, else return the value of M + L(sigma i from 1 to n (i+k-1)C(k) - (sigma i from 1 to n-i_1 (i+k-1)C(k) + (sigma i from 1 to n - (i_1 + i_2) (i+k-2)C(k-1) + ... + (sigma i from 1 to n - (i_1 + i_2 + ... + i_(k-1)) i))))
+At i_1, i_2, ... , i_k (row-first order), append n - (i_1 + i_2 + ... + i_(k-1)) elements.
+To find index M[i_1, i_2, ..., i_k], unless i_1 <= i_2 <= ... <= i_k return 0, else return the value of M + L(sigma i from n-i_1 to n S(i, k-1) + (sigma i from n-i_1-i_2 to n S(i, k-2) + ... + (sigma i from n - (i_1 + i_2 + ... + i_(k-1)) to n S(i, 1)) ... ))
