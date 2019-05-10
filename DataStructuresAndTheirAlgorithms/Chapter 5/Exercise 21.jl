@@ -18,3 +18,5 @@ b.
  - If WPL(T) <= WPL(X), is it true that T and X have same leaves?
 Because T and X is encoding trees of the same text, X can't have more leaves than T.
 Let T be any encoding tree for text w such that WPL(T) is a minimum over all encoding trees for w.
+
+=#
