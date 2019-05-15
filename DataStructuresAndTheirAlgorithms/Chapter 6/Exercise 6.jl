@@ -21,5 +21,7 @@ expected time = (sigma i from 1 to n f(i)) / n
 
 b.
 
-When we traverse for search, make a temp variable and store each value and push forward until the search succeeds, and assign the temp value to the first of table. By this preparation, we can reduce the access time by half.
-So the expected time is α*C_MTF.
+Since the search always succeeds, make a temp variable and push forward each variable with it until the search succeeds, and assign the temp value to the first of table. With this preparation, we can reduce the access time by half plus one.
+So the expected time is α*(C_MTF + 1).
+
+=#
