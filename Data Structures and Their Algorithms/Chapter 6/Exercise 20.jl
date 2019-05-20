@@ -20,9 +20,13 @@ Binary search is done after finding k, so we just add them and the total compari
 
 b.
 
-Applying the order-1 algorithm on k. j > 2^k >2^2^n, and binary search will be applied twice for k and n, respectively.
-So the comparisons is lgn + (lg(lgn)).
+Apply the order-1 algorithm on k. j > 2^k > 2^2^n, and binary search will be applied twice for (2^(j-1) .. 2^j) and (2^(k-1) .. 2^k), respectively.
+So the comparisons are 2(lg(lgn)) + lgn.
 
 c.
 
 Iterate the order-1 algorithm on the result of the order-1 algorithm until 2^2^2^...^1 > n (k times), and then apply binary search k times.
+
+If we denote L_k(n) that L_1(n) = lgn, L_2(n) = lg(lgn), ... , the comparisons are 2L_k(n) + L_(k-1)(n) + L_(k-2)(n) + ... L_2(n) + L_1(n)
+
+=#

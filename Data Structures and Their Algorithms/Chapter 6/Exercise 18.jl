@@ -24,4 +24,3 @@ search_compare([100, 200, 300, 400, 500], T)
 Interpolation search is better than binary search when search is unsuccessful.
 
 =#
-
