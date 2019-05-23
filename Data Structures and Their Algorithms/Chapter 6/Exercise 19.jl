@@ -2,11 +2,15 @@
 
 Q.
 
-Suppose you would like to search a list of keys K_1, ... , K_n whose probabilities of being sought decrease geometrically: p_i = a * p_(i-1), for each i such that 1 < i <= n, where a is a constant in the range O < a < 1.
+Suppose you would like to search a list of keys K_1, ... , K_n whose
+probabilities of being sought decrease geometrically: p_i = a * p_(i-1)
+ for each i such that 1 < i <= n, where a is a constant in the range O < a < 1.
 
 a. Show that p_1 must be about 1/(1 - a).
 
-b. Under what circumstances, if any, would linear search be preferable to binary search? For example, if we regard a as fixed, is there a minimum n at which one method becomes preferable to the other?
+b. Under what circumstances, if any, would linear search be preferable
+to binary search? For example, if we regard a as fixed, is
+there a minimum n at which one method becomes preferable to the other?
 
 A.
 

@@ -2,7 +2,8 @@
 
 Q.
 
-Using the same numbers as in Problem 17, perform an unsuccessful search for the number 500 using both binary and interpolation search.
+Using the same numbers as in Problem 17, perform an unsuccessful
+search for the number 500 using both binary and interpolation search.
 
 A.
 

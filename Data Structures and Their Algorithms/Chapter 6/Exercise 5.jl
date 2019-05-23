@@ -2,7 +2,8 @@
 
 Q.
 
-Which is more suitable if the list is implemented as a table in contiguous memory, the Move-to-Front Heuristic or the Transpose Heuristic?
+Which is more suitable if the list is implemented as a table in contiguous
+memory, the Move-to-Front Heuristic or the Transpose Heuristic?
 Why?
 
 A.

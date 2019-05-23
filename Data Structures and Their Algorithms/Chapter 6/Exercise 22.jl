@@ -2,7 +2,11 @@
 
 Q.
 
-If the worst-case performance of interpolation search is really a concern, it is possible to guarantee O(log n) worst-case performance while maintaining O(log log n) expected-case performance by alternating steps of binary and interpolation search. Present an algorithm that does this gracefully, and justify the time bound.
+If the worst-case performance ofinterpolation search is really a concern,
+it is possible to guarantee O(log n) worst-case performance
+while maintaining O(log log n) expected-case performance by alternating 
+steps of binary and interpolation search. Present an algorithm
+that does this gracefully, and justify the time bound.
 
 A.
 

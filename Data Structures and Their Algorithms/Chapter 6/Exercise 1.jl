@@ -2,11 +2,17 @@
 
 Q.
 
-Consider the following alternative implementation of the dictionary operations by means of unordered linked lists. Allow multiple nodes to exist with the same key value, and implement Insert simply by adding a new node to the front of the list.
+Consider the following alternative implementation of the dictionary
+operations by means of unordered linked lists. Allow multiple nodes
+to exist with the same key value, and implement Insert simply by
+adding a new node to the front of the list.
 
-a. Give algorithms for the Insert, LookUp, and Delete operations and analyze their complexity. (Be sure to say what n is.)
+a. Give algorithms for the Insert, LookUp, and Delete operations and
+analyze their complexity. (Be sure to say what n is.)
 
-b. Under what circumstances (as measured by the relative frequency of the three kinds of operations) might this implementation make sense?
+b. Under what circumstances (as measured by the relative frequency
+of the three kinds of operations) might this implementation make
+sense?
 
 A.
 

@@ -2,9 +2,16 @@
 
 Q.
 
-a. Write the insertion algorithm for a dictionary represented asan ordered table, that is, the algorithm Insert(K, I, T[O. .n - 1]). Assume that the maximum length of the table is given by the constant N, and attempting to exceed this bound is an error condition. Also assume that the current size of the table can be changed simply by changing the value of n within the algorithm. What is the order of the time complexity of your algorithm?
+a. Write the insertion algorithm for a dictionary represented as an
+ordered table, that is, the algorithm Insert(K, I, T[O. .n - 1]).
+Assume that the maximum length of the table is given by the
+constant N, and attempting to exceed this bound is an error condition.
+Also assume that the current size of the table can be
+changed simply by changing the value of n within the algorithm.
+What is the order of the time complexity of your algorithm?
 
-b. Under the same assumptions, write the algorithm for deleting an item from a dictionary represented asan ordered table.
+b. Under the same assumptions, write the algorithm for deleting an
+item from a dictionary represented asan ordered table.
 
 A.
 

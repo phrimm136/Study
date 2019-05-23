@@ -2,15 +2,24 @@
 
 Q.
 
-Sam needs a data structure for searching 10,000 keys, but he knows that 80% of the searches for keys that are actually present involve only 20% of the keys. He decides to separate these 2000 keys into one ordered table, and keep the other 8000 keys in a separate table. To find a key he'll look in the small table first, using binary search, before looking in the big table using the same algorithm.
+Sam needs a data structure for searching 10,000 keys, but he knows
+that 80% of the searches for keys that are actually present involve
+only 20% of the keys. He decides to separate these 2000 keys into
+one ordered table, and keep the other 8000 keys in a separate table.
+To find a key he'll look in the small table first, using binary search,
+before looking in the big table using the same algorithm.
 
-a. How does Sam's algorithm compare to binary search of a single table of size 10,000 in the worst case?
+a. How does Sam's algorithm compare to binary search of a single
+table of size 10,000 in the worst case?
 
-b. How does Sam's method compare to searching a single table in the expected case for successful searches?
+b. How does Sam's method compare to searching asingle table in
+the expected case for successful searches?
 
-c. How do the methods compare in terms of expected performance on unsuccessful searches?
+c. How do the methods compare in terms of expected performance
+on unsuccessful searches?
 
-d. What do you think of Sam's algorithm? Would any change to the 80%-20% division alter your opinion?
+d. What do you think of Sam's algorithm? Would any change to the
+80%-20% division alter your opinion?
 
 A.
 

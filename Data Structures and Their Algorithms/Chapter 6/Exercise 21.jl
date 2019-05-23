@@ -2,7 +2,8 @@
 
 Q.
 
-Describe a set of n key values and a value to be soughthat will force InterpolationSearchLookUp to iterate almost n times.
+Describe a set of n key values and a value to be soughthat will force
+InterpolationSearchLookUp to iterate almost n times.
 
 A.
 
@@ -27,6 +28,7 @@ search_compare(T, T)
 109 => 9
 110 => 10
 
-if (K - key(T[left]-1))/(key(T[right+1])-T[left-1])*(right-left+1) = 0 for every element in a table, the inerpolation seach algorithm is forced to iterate n times.
+if (K - key(T[left]-1))/(key(T[right+1])-T[left-1])*(right-left+1) = 0 for every element in a table,
+the inerpolation seach algorithm is forced to iterate n times.
 
 =#

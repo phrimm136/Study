@@ -2,9 +2,12 @@
 
 Q.
 
-Consider the following sequence of twenty numbers:
-71, 147, 175, 182, 270, 290, 303, 335, 356, 379, 508, 525, 559, 590, 591, 610, 684, 710, 789, 873.
-Use both binary search and interpolation search to find each of the numbers 175, 290, 356, 525, 591, and 710. In this small sample, does interpolation search use fewer comparisons than binary search?
+Consider the following sequence of twenty numbers: 71, 147, 175,
+182, 270, 290, 303, 335, 356, 379, 508, 525, 559, 590, 591, 610,
+684, 710, 789, 873. Use both binary search and interpolation search
+to find each of the numbers 175, 290, 356, 525, 591, and 710. In this
+small sample, does interpolation search use fewer comparisons than
+binary search?
 
 A.
 

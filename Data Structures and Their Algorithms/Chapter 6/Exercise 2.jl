@@ -4,7 +4,8 @@ Q.
 
 a. In the notation of this section, what is the value of p(i, i)?
 
-b. Compute p(i, j, k), the probability that key K_i precedes key K_j which in turn precedes key K_k. Can you generalize the result?
+b. Compute p(i, j, k), the probability that key K_i precedes key K_j
+which in turn precedes key K_k. Can you generalize the result?
 
 A.
 

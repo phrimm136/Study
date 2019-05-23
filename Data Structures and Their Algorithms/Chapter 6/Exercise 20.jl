@@ -2,13 +2,31 @@
 
 Q.
 
-This problem concerns the (rather fanciful) question of how quickly one can search an infinite sorted table. Imagine that the infinite table A[1 .. inf] is sorted, so that A[i] < A[i+1] for every i, and we want to find the unknown position n of an item K = A[n]. The complexity measure will be the number of comparisons performed. The simplest imaginable method is the order-0 algorithm: Start at position 1 and then search positions 2, 3, ... sequentially until reaching A[n] = K. Clearly this method uses n comparisons.
+This problem concerns the (rather fanciful) question of how quickly
+one can search an infinite sorted table. Imagine that the infinite table
+A[1 .. inf] is sorted, so that A[i] < A[i+1] for every i, and we want to
+find the unknown position n of an item K = A[n]. The complexity
+measure will be the number of comparisons performed. The simplest
+imaginable method is the order-0 algorithm: Start at position 1 and
+then search positions 2, 3, ... sequentially until reaching A[n] = K.
+Clearly this method uses n comparisons.
 
-a. An alternative, called the order-1 algorithm, first tries to find the smallest integer k such that 2^k > n, by probing positions 1, 2, 4, 8, .... When such a k has been determined, the exact value of n is found by binary search. Show that the order-i algorithm takes about 21gn comparisons at worst.
+a. An alternative, called the order-1 algorithm, first tries to find the
+smallest integer k such that 2^k > n, by probing positions 1, 2, 4,
+8, .... When such a k has been determined, the exact value of n
+is found by binary search. Show that the order-i algorithm takes
+about 21gn comparisons at worst.
 
-b. Notice that the first stage of the order-1 algorithm is actually a search for an unknown value of k by trying k = 0 first, then k = 1, then k = 2, ...; in other words, k is located by the order-0 algorithm. Show that an order-2 algorithm can be defined by replacing the first stage of the order-1 algorithm by a search for k using the order-1 algorithm. How many comparisons does the order-2 algorithm use?
+b. Notice that the first stage of the order-1 algorithm is actually a
+search for an unknown value of k by trying k = 0 first, then
+k = 1, then k = 2, ...; in other words, k is located by the order-0
+algorithm. Show that an order-2 algorithm can be defined by
+replacing the first stage of the order-1 algorithm by a search for k
+using the order-1 algorithm. How many comparisons does the
+order-2 algorithm use?
 
-c. Generalize the method of part (b) as much as possible to reduce the number of comparisons needed.
+c. Generalize the method of part (b) as much as possible to reduce
+the number of comparisons needed.
 
 A.
 

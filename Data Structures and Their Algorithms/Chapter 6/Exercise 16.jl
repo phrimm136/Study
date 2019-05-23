@@ -2,7 +2,8 @@
 
 Q.
 
-Using the table of ten numbers on page 186, use the interpolation search algorithm to find 93.
+Using the table of ten numbers on page 186, use the interpolation
+search algorithm to find 93.
 
 A.
 
