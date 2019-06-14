@@ -32,8 +32,9 @@ The list will be constructed like
 
 a.
 
-If i is larger than number of items of a node, subtract it from i and access the next node.
-If not, access access the sub-list of the node and repeat the these two statements.
+If i is larger than the number of items of a node, subtract it from i and access the next node.
+Else if i is equal to the number of items of a node, the key of the node is in position i.
+If not, access the sub-list of the node and repeat the these two statements.
 By doing these, it takes time O(log |L|).
 
 b.
