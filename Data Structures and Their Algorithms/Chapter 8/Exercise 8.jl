@@ -46,8 +46,20 @@ function delete(S, T)
         end
     end
 
-    p = T
     if lookup(S, T) == true
         recur(S, T)
     end
 end
+
+a = Dict()
+
+insert("asdf", a)
+a
+lookup("asdf", a)
+lookup("asd", a)
+insert("afds", a)
+a
+insert("asfd", a)
+a
+delete("asdf", a)
+a
