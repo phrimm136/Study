@@ -8,7 +8,8 @@ alphabetical order?
 
 A.
 
-The ordered hasing orders with even an element which has been set with another sequence,
-so keys are always in order.
+Although the ordered hasing orders the sequence of elements, there are possibilities that a key probes on other keys without probing,
+and then we cannot say that they are ordered.
+ex) a-14 linear probing on z-14-1, c-15-1.
 
 =#

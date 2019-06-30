@@ -8,7 +8,7 @@ inserted, independent of the order in which they are inserted.
 
 A.
 
-As the result of previous problem, they are always in order,
+Despite of the result of the previous problem, inserting assures that the sequence are ordered,
 which means that the order when they are inserted is regardless.
 
 =#
