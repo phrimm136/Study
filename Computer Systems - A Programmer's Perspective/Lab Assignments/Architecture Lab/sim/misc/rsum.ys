@@ -1,0 +1,38 @@
+# Execution begins at address 0
+        .pos 0
+        irmovq stack, %rsp
+        call main
+        halt
+
+# List of 3 elements
+        .align 8
+ele1:   .quad 0x00a
+        .quad ele2
+ele2:   .quad 0x0b0
+        .quad ele3
+ele3:   .quad 0xc00
+        .quad 0
+
+main:   irmovq ele1,%rdi
+        call rsum               # rsum(ele1)
+        ret
+
+# long rsum_list(list_ptr ls)
+# start in rdi
+rsum:
+        irmovq $0,%r8                # Constant 0
+        xorq %rax,%rax               # sum = 0
+        subq %r8,%rdi                # set CC
+        je end                       # Stop when null
+        mrmovq (%rdi),%r9            # Get ls->val
+        pushq %r9                    # Save ls->val
+        mrmovq 8(%rdi),%rdi          # Get ls->next
+        call rsum                    # Recursive call
+        popq %r9                     # Restore ls->val
+        addq %r9,%rax                # val + rest
+end:
+        ret
+
+# Stak starts here and grows to lower addresses
+       .pos 0x200
+stack:

@@ -1,0 +1,132 @@
+#/* $begin ncopy-ys */
+##################################################################
+# ncopy.ys - Copy a src block of len words to dst.
+# Return the number of positive words (>0) contained in src.
+#
+# Include your name and ID here.
+#
+# Describe how and why you modified the baseline code.
+#
+##################################################################
+# Do not modify this portion
+# Function prologue.
+# %rdi = src, %rsi = dst, %rdx = len
+ncopy:
+
+##################################################################
+# You can modify this portion
+	# Loop header
+	xorq %rax,%rax		# count = 0;
+        iaddq $-8,%rdx          # For loop unrolling
+	andq %rdx,%rdx		# len <= 0?
+	jl Unroll7     		# if so, goto Unroll:
+
+Loop:	mrmovq (%rdi), %r10	# read val from src...
+	rmmovq %r10, (%rsi)	# ...and store it to dst
+	andq %r10, %r10		# val <= 0?
+	jle Npos		# if so, goto Npos:
+	iaddq $1, %rax  	# count++
+Npos:   mrmovq 8(%rdi), %r10
+        rmmovq %r10, 8(%rsi)
+        andq %r10, %r10
+        jle Npos2
+        iaddq $1, %rax
+Npos2:  mrmovq 16(%rdi), %r10
+        rmmovq %r10, 16(%rsi)
+        andq %r10, %r10
+        jle Npos3
+        iaddq $1, %rax
+Npos3:  mrmovq 24(%rdi), %r10
+        rmmovq %r10, 24(%rsi)
+        andq %r10, %r10
+        jle Npos4
+        iaddq $1, %rax
+Npos4:  mrmovq 32(%rdi), %r10
+        rmmovq %r10, 32(%rsi)
+        andq %r10, %r10
+        jle Npos5
+        iaddq $1, %rax
+Npos5:  mrmovq 40(%rdi), %r10
+        rmmovq %r10, 40(%rsi)
+        andq %r10, %r10
+        jle Npos6
+        iaddq $1, %rax
+Npos6:  mrmovq 48(%rdi), %r10
+        rmmovq %r10, 48(%rsi)
+        andq %r10, %r10
+        jle Npos7
+        iaddq $1, %rax
+Npos7:  mrmovq 56(%rdi), %r10
+        rmmovq %r10, 56(%rsi)
+        andq %r10, %r10
+        jle Npos8
+        iaddq $1, %rax
+Npos8:  iaddq $-8, %rdx         # len -= 8
+	iaddq $64, %rdi		# src++
+	iaddq $64, %rsi		# dst++
+	andq %rdx,%rdx		# len >= 0?
+	jge Loop		# if so, goto Loop:
+Unroll7:iaddq $1, %rdx          # Is seven elements left?
+        jne Unroll6             # if not so, goto Unroll6:
+Seven:  mrmovq 48(%rdi), %r10
+        rmmovq %r10, 48(%rsi)
+        andq %r10, %r10
+        jle Six
+        iaddq $1, %rax
+        jmp Six
+Unroll6:iaddq $1, %rdx          # Is six elements left?
+        jne Unroll5             # if not so, goto Unroll5:
+Six:  mrmovq 40(%rdi), %r10
+        rmmovq %r10, 40(%rsi)
+        andq %r10, %r10
+        jle Five
+        iaddq $1, %rax
+        jmp Five
+Unroll5:iaddq $1, %rdx          # Is five elements left?
+        jne Unroll4             # if not so, goto Unroll4:
+Five:   mrmovq 32(%rdi), %r10
+        rmmovq %r10, 32(%rsi)
+        andq %r10, %r10
+        jle Four
+        iaddq $1, %rax
+        jmp Four
+Unroll4:iaddq $1, %rdx          # Is four elements left?
+        jne Unroll3             # if not so, goto Unroll2:
+Four:   mrmovq 24(%rdi), %r10
+        rmmovq %r10, 24(%rsi)
+        andq %r10, %r10
+        jle Three
+        iaddq $1, %rax
+        jmp Three
+Unroll3:iaddq $1, %rdx          # Is three elements left?
+        jne Unroll2             # if not so, goto Unroll2:
+Three:  mrmovq 16(%rdi), %r10
+        rmmovq %r10, 16(%rsi)
+        andq %r10, %r10
+        jle Two
+        iaddq $1, %rax
+        jmp Two
+Unroll2:iaddq $1, %rdx         # Is two elements left?
+        jne Unroll1            # if not so, goto Unroll1:
+Two:    mrmovq 8(%rdi), %r10
+        rmmovq %r10, 8(%rsi)
+        andq %r10, %r10
+        jle One
+        iaddq $1, %rax
+        jmp One
+Unroll1:iaddq $1, %rdx         # Is one element left?
+        jne Done               # if not so, goto Done:
+One:    mrmovq (%rdi), %r10
+        rmmovq %r10, (%rsi)
+        andq %r10, %r10
+        jle Done
+        iaddq $1, %rax
+##################################################################
+# Do not modify the following section of code
+# Function epilogue.
+Done:
+	ret
+##################################################################
+# Keep the following label at the end of your function
+End:
+#/* $end ncopy-ys */
