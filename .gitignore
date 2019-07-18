@@ -1,8 +1,6 @@
-*.*~
-*.*#*
-.#*.*
+*~
+.#*
 .*
-.*.*
 .clang-tidy
 .directory
 CMakeLists.txt
