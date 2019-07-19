@@ -16,22 +16,6 @@ min-max heap.)
 
 A.
 
-    1
-
-    2
-   1
-
-    3
-   1 2
-
-    4
-   1 2
-  3
-
-    5
-   1 2
-  3 4
-
 In a new heap, the elements at even row are greater than their descendants,
 and those at odd row are less than their descendants.
 When we insert a new element in the new heap, there are two cases.
@@ -48,11 +32,12 @@ and transfer control to the odd case.
 Else if the element is greater than any of tis grandchildren, swap it for the least grandchild
 and repeat the procedure with it.
 The odd case is symetric of the odd case.
-The ordering algorithm in delete function is same as one of construct function.
+The ordering algorithm in delete function is same as one of the construct function.
+By applying it to each element of the heap, we can construct min-max heap.
 
-With these procedures, insertion and deletion is conducted in O(log n) time,
-construction in O(n) time.
-Since we know that the maximum element is the root and the minimum element is
-the less one of the root, it can be retrieved in constant time.
+Since comparision and swap takes constant time, with these comparison procedures,
+insertion and deletion is conducted in O(log n) time, construction in O(n) time.
+Also, now we know that the maximum element is the root and the minimum element is
+the less one of the children of root, it can be retrieved in constant time.
 
 =#
