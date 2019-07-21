@@ -12,8 +12,9 @@ from the AVL tree only when the root acquires priority -1.)
 A.
 
 Insert new node into the doubly linked list, whose position is
-in front of the its inorder successor, and insert it and its address
-to the AVL tree which is in ascending order of the priority.
+in front of the its inorder successor, and insert it and address
+of it and its inorder successor to the AVL tree which is in ascending
+order of the priority.
 If the new is the leftiest except the node with -1 priority, save its address.
 The time consumption is O(1) + O(log n) = O(log n).
 When deleting the minimum node, delete it from the list, change saved address to
