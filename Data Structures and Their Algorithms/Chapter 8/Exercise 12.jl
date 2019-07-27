@@ -33,9 +33,9 @@ a.
                      /                 ..           ..
                     0                 / \
                    /           PASTEUR   PAVLOV
-0                                 / \
-/ \                       POINCARE    POISSON
-          MAXWELL   1   
+                  0               / \
+                 / \      POINCARE   POISSON
+MAXWELL   1   
                    /    
                   0     
                    \    
