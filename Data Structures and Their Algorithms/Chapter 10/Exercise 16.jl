@@ -10,14 +10,27 @@ been allocated.)
 
 A.
 
-Alloc(A, 6)
-Alloc(B, 4)
-Free(A)
+Alloc(A, 3)
+Alloc(B, 2)
 Alloc(C, 3)
-Alloc(D, 3)
-Free(C)
+Alloc(D, 2)
+Free(A)
 Alloc(E, 2)
+Alloc(F, 1)
 Free(B)
-Alloc(F, 5) => fails.
+Alloc(G, 1)
+Free(F)
+Alloc(H, 2)
+Free(C)
+Free(H)
+Alloc(I, 5) => fails.
+
+|A|A|A|B|B|C|C|C|D|D|
+|E|E|F|B|B|C|C|C|D|D|
+|E|E|F| | |C|C|C|D|D|
+|E|E|F| |G|C|C|C|D|D|
+|E|E| | |G|C|C|C|D|D|
+|E|E|H|H|G|C|C|C|D|D|
+|E|E| | |G| | | |D|D|
 
 =#
