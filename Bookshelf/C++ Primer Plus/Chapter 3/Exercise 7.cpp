@@ -7,7 +7,6 @@ int main(int argc, char *argv[])
 
     std::cout << "Enter an automobile gasoline consumption figure in the European style: ";
     std::cin >> europeGasoline;
-
     std::cout << "The gasoline consumption figure in the mpg is " << inverseFactor / europeGasoline << "." << std::endl;
 
     return 0;
