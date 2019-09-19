@@ -150,7 +150,7 @@ word f_ifun = [
 ];
 
 # Is instruction valid?
-bool instr_valid = f_icode in 
+bool instr_valid = f_icode in
 	{ INOP, IHALT, IRRMOVQ, IIRMOVQ, IRMMOVQ, IMRMOVQ,
 	  IOPQ, IJXX, ICALL, IRET, IPUSHQ, IPOPQ };
 
@@ -164,7 +164,7 @@ word f_stat = [
 
 # Does fetched instruction require a regid byte?
 bool need_regids =
-	f_icode in { IRRMOVQ, IOPQ, IPUSHQ, IPOPQ, 
+	f_icode in { IRRMOVQ, IOPQ, IPUSHQ, IPOPQ,
 		     IIRMOVQ, IRMMOVQ, IMRMOVQ };
 
 # Does fetched instruction require a constant word?
@@ -230,7 +230,7 @@ word aluA = [
 
 ## Select input B to ALU
 word aluB = [
-	E_icode in { IRMMOVQ, IMRMOVQ, IOPQ, ICALL, 
+	E_icode in { IRMMOVQ, IMRMOVQ, IOPQ, ICALL,
 		     IPUSHQ, IRET, IPOPQ } : E_valB;
 	E_icode in { IRRMOVQ, IIRMOVQ } : 0;
 	# Other instructions don't need ALU
@@ -302,22 +302,26 @@ word Stat = [
 # Should I stall or inject a bubble into Pipeline Register F?
 # At most one of these can be true.
 bool F_bubble = 0;
-bool F_stall =
-	0;
+bool F_stall = ((d_srcA != RNONE && d_srcA in { W_dstE, W_dstM, M_dstM, M_dstE, e_dstE, E_dstM }) ||
+                (d_srcB != RNONE && d_srcB in { W_dstE, W_dstM, M_dstM, M_dstE, e_dstE, E_dstM }) ||
+                (IRET in { D_icode, E_icode, M_icode })) &&
+                !(E_icode == IJXX && !e_Cnd);
 
 # Should I stall or inject a bubble into Pipeline Register D?
 # At most one of these can be true.
-bool D_stall = 
-	0;
-
-bool D_bubble =
-	0;
+bool D_stall = (d_srcA != RNONE && d_srcA in { W_dstE, W_dstM, M_dstM, M_dstE, e_dstE, E_dstM }) ||
+               (d_srcB != RNONE && d_srcB in { W_dstE, W_dstM, M_dstM, M_dstE, e_dstE, E_dstM });
+bool D_bubble = (!((d_srcA != RNONE && d_srcA in { W_dstE, W_dstM, M_dstM, M_dstE, e_dstE, E_dstM }) ||
+                   (d_srcB != RNONE && d_srcB in { W_dstE, W_dstM, M_dstM, M_dstE, e_dstE, E_dstM })) &&
+                 (IRET in { D_icode, E_icode, M_icode })) ||
+                (E_icode == IJXX && !e_Cnd);
 
 # Should I stall or inject a bubble into Pipeline Register E?
 # At most one of these can be true.
 bool E_stall = 0;
-bool E_bubble =
-	0;
+bool E_bubble = (d_srcA != RNONE && d_srcA in { W_dstE, W_dstM, M_dstM, M_dstE, e_dstE, E_dstM }) ||
+                (d_srcB != RNONE && d_srcB in { W_dstE, W_dstM, M_dstM, M_dstE, e_dstE, E_dstM }) ||
+                (E_icode == IJXX && !e_Cnd);
 
 # Should I stall or inject a bubble into Pipeline Register M?
 # At most one of these can be true.
