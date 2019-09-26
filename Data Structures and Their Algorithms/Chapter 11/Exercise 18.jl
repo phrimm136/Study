@@ -10,7 +10,7 @@ A.
 
 =#
 
-function quicksort(A, l, r)
+function quicksort(A::Array, l::Int, r::Int)
     if A[l] > A[r]
         A[l], A[r] = A[r], A[l]
     end

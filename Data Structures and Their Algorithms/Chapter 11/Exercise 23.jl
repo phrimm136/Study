@@ -12,7 +12,7 @@ A.
 
 using DataStructures
 
-function quicksort(A, l, r)
+function quicksort(A::Array, l::Int, r::Int)
     S = Stack{Array{Int, 1}}()
     push!(S, [l, r])
     while !(isempty(S))
