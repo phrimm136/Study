@@ -18,7 +18,7 @@ ncopy:
 	# Loop header
 	xorq %rax,%rax		# count = 0;
         iaddq $-8,%rdx          # For loop unrolling
-	andq %rdx,%rdx		# len <= 0?
+	andq %rdx,%rdx		# len < 8?
 	jl Unroll7     		# if so, goto Unroll:
 
 Loop:	mrmovq (%rdi), %r10	# read val from src...
@@ -76,7 +76,7 @@ Seven:  mrmovq 48(%rdi), %r10
         jmp Six
 Unroll6:iaddq $1, %rdx          # Is six elements left?
         jne Unroll5             # if not so, goto Unroll5:
-Six:  mrmovq 40(%rdi), %r10
+Six:    mrmovq 40(%rdi), %r10
         rmmovq %r10, 40(%rsi)
         andq %r10, %r10
         jle Five
@@ -91,7 +91,7 @@ Five:   mrmovq 32(%rdi), %r10
         iaddq $1, %rax
         jmp Four
 Unroll4:iaddq $1, %rdx          # Is four elements left?
-        jne Unroll3             # if not so, goto Unroll2:
+        jne Unroll3             # if not so, goto Unroll3:
 Four:   mrmovq 24(%rdi), %r10
         rmmovq %r10, 24(%rsi)
         andq %r10, %r10
