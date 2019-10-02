@@ -12,6 +12,6 @@ int main(int argc, char *argv[])
         std::cout << "+ " << input << " = " << sum << '\n';
         std::cin >> input;
     }
-    std::cout << "Zero entered. Terminating.." << std::endl;
+    std::cout << "Entered zero. Terminating.." << std::endl;
     return 0;
 }
