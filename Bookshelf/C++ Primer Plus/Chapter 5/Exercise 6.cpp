@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
             std::cout << "Enter sales of " << month[j] << " of year " << i+1 << ": ";
             std::cin >> sale[i][j];
         }
-        std::cout << "\n";
+        std::cout.put('\n');
     }
     for (int i = 0; i < 3; ++i)
     {
