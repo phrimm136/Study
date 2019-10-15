@@ -2,7 +2,7 @@
 
 Q.
 
-Let T[O..n-1] be a table of n data items that can be compared
+Let T[0..n-1] be a table of n data items that can be compared
 for equality but not for relative order; likewise the data elements
 cannot be used as indices into another table. (Therefore it would
 be inherently impossible to sort the table, for example, since there
