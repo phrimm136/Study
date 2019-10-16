@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     while (input)
     {
         sum += input;
-        std::cout << "+ " << input << " = " << sum << '\n';
+        std::cout << " + " << input << " = " << sum << '\n';
         std::cin >> input;
     }
     std::cout << "Entered zero. Terminating.." << std::endl;
