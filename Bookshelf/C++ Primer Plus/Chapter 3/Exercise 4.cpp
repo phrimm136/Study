@@ -1,7 +1,6 @@
 #include <iostream>
 
-int main()
-{
+int main() {
     long long seconds, seconds_backup;
     int days, hours, minutes;
     int day_div = 86400, hour_div = 3600, minute_div = 60;
@@ -17,11 +16,9 @@ int main()
     minutes = seconds / minute_div;
     seconds %= minute_div;
 
-    std::cout << seconds_backup << " seconds = "
-              << days << " days, "
-              << hours << " hours, "
-              << minutes << " minutes, "
-              << seconds << " seconds" << std::endl;
+    std::cout << seconds_backup << " seconds = " << days << " days, " << hours
+              << " hours, " << minutes << " minutes, " << seconds << " seconds"
+              << std::endl;
 
     return 0;
 }

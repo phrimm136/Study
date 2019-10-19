@@ -1,7 +1,6 @@
 #include <iostream>
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     char ch;
 
     std::cout << "Please enter one of the following choices:\n"
@@ -9,14 +8,12 @@ int main(int argc, char *argv[])
               << "t) tree\t\t\tg) game\n";
     std::cin >> ch;
 
-    while (ch != 'c' && ch != 'p' && ch != 't' && ch != 'g')
-    {
+    while (ch != 'c' && ch != 'p' && ch != 't' && ch != 'g') {
         std::cout << "Please enter a c, p, t, or g: ";
         std::cin >> ch;
     }
 
-    switch (ch)
-    {
+    switch (ch) {
     case 'c':
         std::cout << "A lion is a carnivore.\n";
         break;

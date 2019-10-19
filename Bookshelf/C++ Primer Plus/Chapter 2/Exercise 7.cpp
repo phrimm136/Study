@@ -2,9 +2,7 @@
 
 void clock(int, int);
 
-
-int main()
-{
+int main() {
     int hour, minute;
 
     std::cout << "Enter the number of hours: ";
@@ -16,7 +14,6 @@ int main()
     return 0;
 }
 
-void clock(int hour, int minute)
-{
-    std::cout << "Time: " << hour << ":" << minute<< std::endl;
+void clock(int hour, int minute) {
+    std::cout << "Time: " << hour << ":" << minute << std::endl;
 }

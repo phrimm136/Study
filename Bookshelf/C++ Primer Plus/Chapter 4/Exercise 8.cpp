@@ -1,14 +1,12 @@
 #include <iostream>
 
-struct pizza
-{
+struct pizza {
     std::string company;
     double diameter;
     double weight;
 };
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     struct pizza *pizza = new struct pizza;
 
     std::cout << "Enter diameter of the pizza: ";

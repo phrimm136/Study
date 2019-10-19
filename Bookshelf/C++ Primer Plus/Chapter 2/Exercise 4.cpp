@@ -2,9 +2,7 @@
 
 int convert(int);
 
-
-int main()
-{
+int main() {
     int age;
 
     std::cout << "Enter your age: ";
@@ -14,7 +12,6 @@ int main()
     return 0;
 }
 
-int convert(int age)
-{
+int convert(int age) {
     return age * 12; // It seems that 384 is a typo of 348.
 }

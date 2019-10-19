@@ -1,14 +1,12 @@
 #include <iostream>
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     int tvarp = 0, tax = 0;
 
-    while (1)
-    {
-        std::cout << "Enter your income in tvarp (non numeric input to terminate): ";
-        if (!(std::cin >> tvarp) || tvarp < 0)
-        {
+    while (1) {
+        std::cout
+            << "Enter your income in tvarp (non numeric input to terminate): ";
+        if (!(std::cin >> tvarp) || tvarp < 0) {
             std::cout << "Illegal input; terminating...\n";
             return 0;
         }

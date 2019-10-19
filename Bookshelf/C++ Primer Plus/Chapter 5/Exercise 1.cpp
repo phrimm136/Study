@@ -1,7 +1,6 @@
 #include <iostream>
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     int sum = 0, from, to;
 
     std::cout << "Enter two integers to calculate the ranged sum of them: \n";

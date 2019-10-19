@@ -1,7 +1,6 @@
 #include <iostream>
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     // use SI metric.
     double distance, petrol;
 
@@ -9,7 +8,8 @@ int main(int argc, char *argv[])
     std::cin >> distance;
     std::cout << "Enter petrol in liters: ";
     std::cin >> petrol;
-    std::cout << "Your fuel economy is " << petrol / (distance / 100) << "." << std::endl;
+    std::cout << "Your fuel economy is " << petrol / (distance / 100) << "."
+              << std::endl;
 
     return 0;
 }
