@@ -1,0 +1,268 @@
+#+PROPERTY: header-args:jupyter-python :session *jp* :export both :results output :async yes
+
+
+#+BEGIN_SRC jupyter-python :kernel python
+  %matplotlib inline
+#+END_SRC
+
+#+RESULTS:
+
+#+BEGIN_SRC jupyter-python :kernel python :file /home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/gkyEcF.png :file-path "./CNN.py"
+  import numpy as np
+  import matplotlib.pyplot as plt
+  import keras as kr
+  import keras.backend as K
+
+  from keras.datasets import mnist
+  from keras.models import Sequential
+  from keras.layers import Dense, Dropout, Flatten, Activation, Input
+  from keras.layers.convolutional import Conv2D, MaxPooling2D
+
+
+  batch_size = 128
+  num_classes = 10
+  epochs = 5
+
+  img_rows, img_cols = 28, 28
+  (x_train, y_train), (x_test, y_test) = mnist.load_data()
+
+  if K.image_data_format() == "channels_first":
+      x_train = x_train.reshape(x_train.shape[0], 1, img_rows, img_cols)
+      x_test = x_test.reshape(x_test.shape[0], 1, img_rows, img_cols)
+      input_shape = (1, img_rows, img_cols)
+  else:
+      x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, 1)
+      x_test = x_test.reshape(x_test.shape[0], img_rows, img_cols, 1)
+      input_shape = (img_rows, img_cols, 1)
+
+  x_train = x_train.astype("float32") / 255
+  x_test = x_test.astype("float32") / 255
+
+  print('x_train shape:', x_train.shape)
+  print(x_train.shape[0], 'train samples')
+  print(x_test.shape[0], 'test samples')
+#+END_SRC
+
+#+RESULTS:
+: Using TensorFlow backend.
+: x_train shape: (60000, 28, 28, 1)
+: 60000 train samples
+: 10000 test samples
+
+#+BEGIN_SRC jupyter-python :kernel python :file /home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/EhBT0U.png :file-path "./CNN.py"
+  model = Sequential()
+  model.add(Conv2D(32, (3, 3), activation="relu", padding="same", input_shape=input_shape))
+  model.add(MaxPooling2D(pool_size=(2, 2), padding="same"))
+  model.add(Conv2D(64, (3, 3), activation="relu", padding="same"))
+  model.add(MaxPooling2D(pool_size=(2, 2), padding="same"))
+  model.add(Conv2D(128, (3, 3), activation="relu", padding="same"))
+  model.add(MaxPooling2D(pool_size=(2, 2), padding="same"))
+  model.add(Dropout(.25))
+  model.add(Flatten())
+  model.add(Dense(625, activation="relu"))
+  model.add(Dropout(.5))
+  model.add(Dense(num_classes, activation="softmax", name="preds"))
+
+  model.compile(loss=kr.losses.categorical_crossentropy,
+                optimizer=kr.optimizers.Adam(),
+                metrics=["accuracy"])
+#+END_SRC
+
+#+RESULTS:
+
+#+BEGIN_SRC jupyter-python :kernel python :file /home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/6mDNky.png :file-path "./CNN.py"
+  y_train = kr.utils.to_categorical(y_train, num_classes)
+  y_test = kr.utils.to_categorical(y_test, num_classes)
+
+  model.summary()
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+  Model: "sequential_1"
+  _________________________________________________________________
+  Layer (type)                 Output Shape              Param #
+  =================================================================
+  conv2d_1 (Conv2D)            (None, 28, 28, 32)        320
+  _________________________________________________________________
+  max_pooling2d_1 (MaxPooling2 (None, 14, 14, 32)        0
+  _________________________________________________________________
+  conv2d_2 (Conv2D)            (None, 14, 14, 64)        18496
+  _________________________________________________________________
+  max_pooling2d_2 (MaxPooling2 (None, 7, 7, 64)          0
+  _________________________________________________________________
+  conv2d_3 (Conv2D)            (None, 7, 7, 128)         73856
+  _________________________________________________________________
+  max_pooling2d_3 (MaxPooling2 (None, 4, 4, 128)         0
+  _________________________________________________________________
+  dropout_1 (Dropout)          (None, 4, 4, 128)         0
+  _________________________________________________________________
+  flatten_1 (Flatten)          (None, 2048)              0
+  _________________________________________________________________
+  dense_1 (Dense)              (None, 625)               1280625
+  _________________________________________________________________
+  dropout_2 (Dropout)          (None, 625)               0
+  _________________________________________________________________
+  preds (Dense)                (None, 10)                6260
+  =================================================================
+  Total params: 1,379,557
+  Trainable params: 1,379,557
+  Non-trainable params: 0
+  _________________________________________________________________
+#+end_example
+
+#+BEGIN_SRC jupyter-python :kernel python :file /home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/MoLvt8.png :file-path "./CNN.py"
+  model.fit(x_train, y_train,
+            batch_size=batch_size,
+            epochs=epochs,
+            validation_data=(x_test, y_test))
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+  Train on 60000 samples, validate on 10000 samples
+  Epoch 1/5
+  60000/60000 [==============================] - 114s 2ms/step - loss: 0.2083 - accuracy: 0.9337 - val_loss: 0.0371 - val_accuracy: 0.9872
+  Epoch 2/5
+  60000/60000 [==============================] - 115s 2ms/step - loss: 0.0610 - accuracy: 0.9810 - val_loss: 0.0277 - val_accuracy: 0.9902
+  Epoch 3/5
+  60000/60000 [==============================] - 114s 2ms/step - loss: 0.0435 - accuracy: 0.9862 - val_loss: 0.0233 - val_accuracy: 0.9926
+  Epoch 4/5
+  60000/60000 [==============================] - 115s 2ms/step - loss: 0.0352 - accuracy: 0.9891 - val_loss: 0.0239 - val_accuracy: 0.9915
+  Epoch 5/5
+  60000/60000 [==============================] - 107s 2ms/step - loss: 0.0304 - accuracy: 0.9903 - val_loss: 0.0211 - val_accuracy: 0.9927
+#+end_example
+
+
+#+BEGIN_SRC jupyter-python :kernel python :file /home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/rvX06s.png :file-path "./CNN.py"
+  from random import randrange
+
+
+  test_idx = randrange(x_train.shape[0])
+  test_img = x_train[test_idx]
+  plt.imshow(test_img.reshape(28, 28), cmap="gray")
+  plt.title("Index: {}, Value: {}".format(test_idx, y_train[test_idx]))
+
+#+END_SRC
+
+#+RESULTS:
+[[file:/home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/rvX06s.png]]
+
+#+begin_src jupyter-python :kernel python :file /home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/NbNOJ8.png :file-path "./CNN.py"
+  from keras import Model
+
+
+  layer_outputs = [layer.output for layer in model.layers]
+  activation_model = Model(inputs=model.input, outputs=layer_outputs)
+  activations = activation_model.predict(test_img.reshape(1, 28, 28, 1))
+
+
+  def display_activation(activations, row_size, col_size, act_index):
+      activation = activations[act_index]
+      activation_index = 0
+      fig, ax = plt.subplots(row_size, col_size, figsize=(row_size * 2.5, col_size * 1.5))
+      for row in range(row_size):
+          for col in range(col_size):
+              ax[row][col].imshow(activation[0, :, :, activation_index], cmap="gray")
+              activation_index += 1
+
+
+  def display_filter(activations, row_size, col_size, act_index):
+      weight = model.layers[act_index].get_weights()[0][:, :, 0, :]
+      activation_index = 0
+      flg, ax = plt.subplots(row_size, col_size, figsize=(row_size * 2.5, col_size * 1.5))
+      for row in range(row_size):
+          for col in range(col_size):
+              ax[row][col].imshow(weight[:, :, activation_index], cmap="gray")
+              activation_index += 1
+#+END_SRC
+
+#+RESULTS:
+
+#+BEGIN_SRC jupyter-python :kernel python :file /home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/u1brq3.png :file-path "./CNN.py"
+  display_activation(activations, 6, 5, 0)
+#+END_SRC
+
+#+RESULTS:
+[[file:/home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/u1brq3.png]]
+
+#+BEGIN_SRC jupyter-python :kernel python :file /home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/urOH75.png :file-path "./CNN.py"
+  display_filter(activations, 6, 5, 0)
+#+END_SRC
+
+#+RESULTS:
+[[file:/home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/urOH75.png]]
+
+#+BEGIN_SRC jupyter-python :kernel python :file /home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/yrOm1F.png :file-path "./CNN.py"
+  display_activation(activations, 6, 5, 1)
+#+END_SRC
+
+#+RESULTS:
+[[file:/home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/yrOm1F.png]]
+
+
+#+BEGIN_SRC jupyter-python :kernel python :file /home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/gahAA8.png :file-path "./CNN.py"
+  display_activation(activations, 6, 5, 2)
+#+END_SRC
+
+#+RESULTS:
+[[file:/home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/gahAA8.png]]
+
+#+BEGIN_SRC jupyter-python :kernel python :file /home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/sjbIKc.png :file-path "./CNN.py"
+  display_filter(activations, 6, 5, 2)
+#+END_SRC
+
+#+RESULTS:
+[[file:/home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/sjbIKc.png]]
+
+#+BEGIN_SRC jupyter-python :kernel python :file /home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/dBXx2Y.png :file-path "./CNN.py"
+  display_activation(activations, 6, 5, 3)
+#+END_SRC
+
+#+RESULTS:
+[[file:/home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/dBXx2Y.png]]
+
+#+BEGIN_SRC jupyter-python :kernel python :file /home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/z6oayu.png :file-path "./CNN.py"
+  display_activation(activations, 6, 5, 4)
+#+END_SRC
+
+#+RESULTS:
+[[file:/home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/z6oayu.png]]
+
+#+BEGIN_SRC jupyter-python :kernel python :file /home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/lHLezZ.png :file-path "./CNN.py"
+  display_filter(activations, 6, 5, 4)
+#+END_SRC
+
+#+RESULTS:
+[[file:/home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/lHLezZ.png]]
+
+#+BEGIN_SRC jupyter-python :kernel python :file /home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/rqPi0g.png :file-path "./CNN.py"
+  display_activation(activations, 6, 5, 5)
+#+END_SRC
+
+#+RESULTS:
+[[file:/home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/rqPi0g.png]]
+
+#+BEGIN_SRC jupyter-python :kernel python :file /home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/iBFblf.png :file-path "./CNN.py"
+  act_dense_1 = activations[8]
+  y = act_dense_1[0]
+  x = range(len(y))
+  plt.xticks(x)
+  plt.bar(x, y)
+  plt.show()
+#+END_SRC
+
+#+RESULTS:
+[[file:/home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/iBFblf.png]]
+
+#+BEGIN_SRC jupyter-python :kernel python :file /home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/BOvuhV.png :file-path "./CNN.py"
+  act_dense_2 = activations[10]
+  y = act_dense_2[0]
+  x = range(len(y))
+  plt.xticks(x)
+  plt.bar(x, y)
+  plt.show()
+#+END_SRC
+
+#+RESULTS:
+[[file:/home/user/github/Study/Playground/CNNVisualize/.ob-jupyter/BOvuhV.png]]
