@@ -1,10 +1,12 @@
 #include <cctype>
 #include <iostream>
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     char ch;
 
-    while (1) {
+    while (1)
+    {
         std::cin >> ch;
 
         if (ch == '@')

@@ -1,6 +1,7 @@
 #include <iostream>
 
-int main() {
+int main()
+{
     int D, M, S;
     double Mconv = 1 / 60., Sconv = 1 / 3600.;
 
@@ -11,8 +12,7 @@ int main() {
     std::cin >> M;
     std::cout << "Finally, enter the seconds of arc: ";
     std::cin >> S;
-    std::cout << D << " degrees, " << M << " minutes, " << S
-              << " seconds = " << double(D) + M * Mconv + S * Sconv
+    std::cout << D << " degrees, " << M << " minutes, " << S << " seconds = " << double(D) + M * Mconv + S * Sconv
               << " degrees" << std::endl;
 
     return 0;

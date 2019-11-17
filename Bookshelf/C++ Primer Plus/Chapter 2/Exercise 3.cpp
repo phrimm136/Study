@@ -3,7 +3,8 @@
 void Tbm();
 void Shtr();
 
-int main() {
+int main()
+{
     Tbm();
     Tbm();
     Shtr();
@@ -12,6 +13,12 @@ int main() {
     return 0;
 }
 
-void Tbm() { std::cout << "Three blind mice" << std::endl; }
+void Tbm()
+{
+    std::cout << "Three blind mice" << std::endl;
+}
 
-void Shtr() { std::cout << "See how they run" << std::endl; }
+void Shtr()
+{
+    std::cout << "See how they run" << std::endl;
+}

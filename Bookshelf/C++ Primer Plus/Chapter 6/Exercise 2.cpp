@@ -1,7 +1,8 @@
 #include <array>
 #include <iostream>
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     std::array<double, 10> arr;
     int i, larger = 0;
     double avg = 0;
@@ -18,7 +19,6 @@ int main(int argc, char *argv[]) {
             larger++;
 
     std::cout << "The average donation value is " << avg << ". \n";
-    std::cout << "The number of donations exceeding the average is " << larger
-              << ". \n";
+    std::cout << "The number of donations exceeding the average is " << larger << ". \n";
     return 0;
 }

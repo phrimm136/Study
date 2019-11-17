@@ -1,7 +1,8 @@
 #include <array>
 #include <iostream>
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     const int ArSize = 101;
     std::array<long double, ArSize> factorials;
 

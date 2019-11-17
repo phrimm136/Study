@@ -142,14 +142,20 @@ NOTES:
  *   Rating: 1
  */
 
-int bitXor(int x, int y) { return (~((~x) & (~y)) & ~(x & y)); }
+int bitXor(int x, int y)
+{
+    return (~((~x) & (~y)) & ~(x & y));
+}
 /*
  * tmin - return minimum two's complement integer
  *   Legal ops: ! ~ & ^ | + << >>
  *   Max ops: 4
  *   Rating: 1
  */
-int tmin(void) { return 1 << 31; }
+int tmin(void)
+{
+    return 1 << 31;
+}
 // 2
 /*
  * isTmax - returns 1 if x is the maximum, two's complement number,
@@ -158,7 +164,10 @@ int tmin(void) { return 1 << 31; }
  *   Max ops: 10
  *   Rating: 1
  */
-int isTmax(int x) { return !((~x) ^ (x + 1)) & !!(x ^ (~0)); }
+int isTmax(int x)
+{
+    return !((~x) ^ (x + 1)) & !!(x ^ (~0));
+}
 /*
  * allOddBits - return 1 if all odd-numbered bits in word set to 1
  *   where bits are numbered from 0 (least significant) to 31 (most significant)
@@ -167,12 +176,11 @@ int isTmax(int x) { return !((~x) ^ (x + 1)) & !!(x ^ (~0)); }
  *   Max ops: 12
  *   Rating: 2
  */
-int allOddBits(int x) {
+int allOddBits(int x)
+{
     /* return !(((((((((0xaa) << 8) + 0xaa) << 8) + 0xaa) << 8) + 0xaa) & x) ^
      * x); */
-    return !(((((0xaa & x) & (0xaa & (x >> 8))) & (0xaa & (x >> 16))) &
-              (0xaa & (x >> 24))) ^
-             0xaa);
+    return !(((((0xaa & x) & (0xaa & (x >> 8))) & (0xaa & (x >> 16))) & (0xaa & (x >> 24))) ^ 0xaa);
 }
 /*
  * negate - return -x
@@ -181,7 +189,10 @@ int allOddBits(int x) {
  *   Max ops: 5
  *   Rating: 2
  */
-int negate(int x) { return (~x) + 1; }
+int negate(int x)
+{
+    return (~x) + 1;
+}
 // 3
 /*
  * isAsciiDigit - return 1 if 0x30 <= x <= 0x39 (ASCII codes for characters '0'
@@ -191,7 +202,8 @@ int negate(int x) { return (~x) + 1; }
  *   Max ops: 15
  *   Rating: 3
  */
-int isAsciiDigit(int x) {
+int isAsciiDigit(int x)
+{
     return (!(0x03 ^ (x >> 4))) & !((!!(0x08 & x)) & (!!(0x06 & x)));
 }
 /*
@@ -201,7 +213,8 @@ int isAsciiDigit(int x) {
  *   Max ops: 16
  *   Rating: 3
  */
-int conditional(int x, int y, int z) {
+int conditional(int x, int y, int z)
+{
     return ((~(!!x) + 1) & y) | ((~(!x) + 1) & z);
 }
 /*
@@ -211,9 +224,9 @@ int conditional(int x, int y, int z) {
  *   Max ops: 24
  *   Rating: 3
  */
-int isLessOrEqual(int x, int y) {
-    return ((!(((((~x) + 1) + y) >> 31) & 1)) &
-            (!(((x >> 31) & 1) ^ ((y >> 31) & 1)))) |
+int isLessOrEqual(int x, int y)
+{
+    return ((!(((((~x) + 1) + y) >> 31) & 1)) & (!(((x >> 31) & 1) ^ ((y >> 31) & 1)))) |
            (((x >> 31) & 1) & (!((y >> 31) & 1)));
 }
 // 4
@@ -225,7 +238,10 @@ int isLessOrEqual(int x, int y) {
  *   Max ops: 12
  *   Rating: 4
  */
-int logicalNeg(int x) { return ((x >> 31) | (((~x) + 1) >> 31)) + 1; }
+int logicalNeg(int x)
+{
+    return ((x >> 31) | (((~x) + 1) >> 31)) + 1;
+}
 /* howManyBits - return the minimum number of bits required to represent x in
  *             two's complement
  *  Examples: howManyBits(12) = 5
@@ -238,7 +254,8 @@ int logicalNeg(int x) { return ((x >> 31) | (((~x) + 1) >> 31)) + 1; }
  *  Max ops: 90
  *  Rating: 4
  */
-int howManyBits(int x) {
+int howManyBits(int x)
+{
     int n = 0;
 
     x = x ^ (x << 1);
@@ -262,7 +279,8 @@ int howManyBits(int x) {
  *   Max ops: 30
  *   Rating: 4
  */
-unsigned floatScale2(unsigned uf) {
+unsigned floatScale2(unsigned uf)
+{
     if (!(((uf << 1) >> 24) ^ 0xff))
         return uf;
     if (!(((uf >> 23) & 0xff) | 0x0))
@@ -281,7 +299,8 @@ unsigned floatScale2(unsigned uf) {
  *   Max ops: 30
  *   Rating: 4
  */
-int floatFloat2Int(unsigned uf) {
+int floatFloat2Int(unsigned uf)
+{
     int mag = ((uf >> 23) & 0xff) - 127;
     int x;
     if (((uf << 1) >> 24) == 0xff)
@@ -313,7 +332,8 @@ int floatFloat2Int(unsigned uf) {
  *   Max ops: 30
  *   Rating: 4
  */
-unsigned floatPower2(int x) {
+unsigned floatPower2(int x)
+{
     if (x >= 128)
         return 0xff << 23;
     if (x < -127)

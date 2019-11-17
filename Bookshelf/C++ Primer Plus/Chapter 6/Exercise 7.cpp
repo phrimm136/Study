@@ -1,19 +1,22 @@
 #include <cctype>
 #include <iostream>
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     std::string word = "";
     int vowel = 0, consonant = 0, other = 0;
 
     std::cout << "Enter words (q to quit):\n";
-    while (true) {
+    while (true)
+    {
         std::cin >> word;
 
         if (word == "q")
             break;
 
         if (isalpha(word[0]))
-            switch (word[0]) {
+            switch (word[0])
+            {
             case 'A':
             case 'E':
             case 'I':

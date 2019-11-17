@@ -2,14 +2,16 @@
 
 #define strsize 100
 
-struct bop {
+struct bop
+{
     char fullname[strsize]; // real name
     char title[strsize];    // job title
     char bopname[strsize];  // secet BOP name
     int preference;         // 0 = fullname, 1 = title, 2 = bopname
 };
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     struct bop bop[5] = {{"Wimp Macho", "Undergraduate Student", "WISP", 0},
                          {"Raki Rhodes", "Junior Programmer", "RHINO", 1},
                          {"Celia Laiter", "Archietecture Designer", "MIPS", 2},
@@ -22,10 +24,12 @@ int main(int argc, char *argv[]) {
               << "c. display by bopname\td.display by preference\n"
               << "q. quit\n";
     std::cout << "Enter your choice: ";
-    while (true) {
+    while (true)
+    {
         std::cin >> ch;
 
-        switch (ch) {
+        switch (ch)
+        {
         case 'a':
             for (int i = 0; i < 5; ++i)
                 std::cout << bop[i].fullname << " \n";
@@ -40,7 +44,8 @@ int main(int argc, char *argv[]) {
             break;
         case 'd':
             for (int i = 0; i < 5; ++i)
-                switch (bop[i].preference) {
+                switch (bop[i].preference)
+                {
                 case 0:
                     std::cout << bop[i].fullname << " \n";
                     break;
