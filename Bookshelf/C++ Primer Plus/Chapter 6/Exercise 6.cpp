@@ -1,11 +1,13 @@
 #include <iostream>
 
-struct contrib {
+struct contrib
+{
     std::string name;
     double money;
 };
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     int N, members = 0;
     struct contrib *contrib;
 
@@ -14,7 +16,8 @@ int main(int argc, char *argv[]) {
     std::cin.get();
     contrib = new struct contrib[N];
 
-    for (int i = 0; i < N; ++i) {
+    for (int i = 0; i < N; ++i)
+    {
         std::cout << "Enter a name of a contributor: ";
         getline(std::cin, contrib[i].name);
         std::cout << "Enter monetary contributio of the contributor: ";
@@ -24,9 +27,9 @@ int main(int argc, char *argv[]) {
 
     std::cout << "Grand Patrons\n";
     for (int i = 0; i < N; ++i)
-        if (contrib[i].money >= 10000.) {
-            std::cout << "Name: " << contrib[i].name
-                      << ", Contribution: " << contrib[i].money << "\n";
+        if (contrib[i].money >= 10000.)
+        {
+            std::cout << "Name: " << contrib[i].name << ", Contribution: " << contrib[i].money << "\n";
             ++members;
         }
     if (members == 0)
@@ -35,9 +38,9 @@ int main(int argc, char *argv[]) {
     members = 0;
     std::cout << "Patrons\n";
     for (int i = 0; i < N; ++i)
-        if (contrib[i].money < 10000.) {
-            std::cout << "Name: " << contrib[i].name
-                      << ", Contribution: " << contrib[i].money << "\n";
+        if (contrib[i].money < 10000.)
+        {
+            std::cout << "Name: " << contrib[i].name << ", Contribution: " << contrib[i].money << "\n";
             ++members;
         }
     if (members == 0)

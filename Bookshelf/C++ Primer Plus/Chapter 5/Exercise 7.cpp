@@ -1,11 +1,13 @@
 #include <iostream>
 
-struct car {
+struct car
+{
     std::string make;
     int year;
 };
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     struct car *catalog = NULL;
     int N;
 
@@ -14,7 +16,8 @@ int main(int argc, char *argv[]) {
     std::cin.get();
     catalog = new struct car[N];
 
-    for (int i = 0; i < N; ++i) {
+    for (int i = 0; i < N; ++i)
+    {
         std::cout << "Car #" << i + 1 << "\n";
         std::cout << "Please enter the make: ";
         getline(std::cin, catalog[i].make);

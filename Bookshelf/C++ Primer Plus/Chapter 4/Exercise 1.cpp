@@ -1,6 +1,7 @@
 #include <iostream>
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     std::string f_name, l_name;
     char grade;
     int age;

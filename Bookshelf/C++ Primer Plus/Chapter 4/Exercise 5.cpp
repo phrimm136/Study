@@ -1,12 +1,14 @@
 #include <iostream>
 
-struct CandyBar {
+struct CandyBar
+{
     std::string name;
     double weight;
     int calories;
 };
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     struct CandyBar snack = {"Munch", 2.3, 350};
 
     std::cout << "Name: " << snack.name << '\n'
