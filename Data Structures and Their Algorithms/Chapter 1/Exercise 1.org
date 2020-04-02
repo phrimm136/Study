@@ -1,0 +1,38 @@
+Q.
+
+The table search in algorithm (A) terminates when either $K$ is found
+in the table or the end of the table is reached. Each of these conditions
+must be checked every time around the loop. (In Algorithm 1.2 on
+page 10, the more formal description of algorithm (A), the first test
+is $T[i] = K$ and the second test is implicit in the for loop, where we
+must always check whether $i \le n - 1$.) Find a simple improvement
+to algorithm (A) that avoids testing whether the end of the table has
+been reached. (You may assume that table position $T[n]$ is available
+for your use.)
+
+A.
+
+#+BEGIN_SRC julia :kernel julia
+  function SequentialSearch(T::Array, K::Int)::Int
+      """
+      Return position of K in table T if it is, otherwise return -1. The nth element of table contains K.
+      """
+      i::Int = 1
+      while true
+          if T[i] == K
+              return (i + 1) % (length(T) + 1) - 1
+          else
+              i += 1
+          end
+      end
+  end
+#+END_SRC
+
+#+BEGIN_SRC julia :kernel julia
+  T = [1, 2, 3, 4, 100]
+  K1 = 3
+  K2 = 100
+
+  print(SequentialSearch(T, K1), "\n",
+        SequentialSearch(T, K2))
+#+END_SRC

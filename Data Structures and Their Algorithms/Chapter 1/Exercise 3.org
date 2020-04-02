@@ -1,0 +1,11 @@
+Q.
+
+Suppose that $T[0..n-1]$ is a table of records with the structure
+shown in Figure 1.1 on page 4. If $T$ begins at address $X$, what is the
+address of Weight($T[i]$)?
+
+A.
+
+Each structure record takes 40 memories, and an address of weight in a
+structure record starts after 36 bytes from the record.
+So the address of Weight($T[i]$) is $X + 40 * i + 36$.
