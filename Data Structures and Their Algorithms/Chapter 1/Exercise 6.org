@@ -1,0 +1,32 @@
+Q.
+
+Write the procedure $SinglyLinkedDelete$ that complements procedure
+$SinglyLinkedlnsert$ of Algorithm 1.1 on page 8. It should take as its
+argument a pointer $P$ and should delete the cell just after the one to
+which $P$ points. Be sure to handle the possible error condition in
+some appropriate way.
+
+A.
+
+#+BEGIN_SRC julia :kernel julia
+  function SinglyLinkedDelete(P::LList)
+      """
+      Delete the cell after the one to which P points
+      """
+      if P.next != nothing
+          P.next = P.next.next
+      end
+  end
+#+END_SRC
+
+#+BEGIN_SRC julia :kernel julia
+  include("SinglyLinkedList.jl")
+
+  list = LList(1, nothing)
+  SinglyLinkedInsert(LList(3, nothing), list)
+  SinglyLinkedInsert(LList(2, nothing), list)
+  list
+
+  SinglyLinkedDelete(list)
+  list
+#+END_SRC

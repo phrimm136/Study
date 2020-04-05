@@ -1,0 +1,58 @@
+Q.
+
+a. Write a procedure $Append$ that adds a new element to the end
+of a linked list represented as in Figure 1.4 on page 6. The call
+$Append(K, list)$ should create a new record with key value $K$ and
+add it just after the last element in $list$. You may use the procedure
+$NewNode$ of Algorithm 1.4 on page 12, and use of a locative will
+be handy.
+
+b. Write the same procedure without locatives. $Append$ should now
+take only one argument, and may refer to list as a global variable
+(in case $list$ has no elements).
+
+A.
+
+a.
+
+#+BEGIN_SRC julia :kernel julia
+  include("SinglyLinkedInsert.jl")
+  include("NewNode.jl")
+
+  function Append(K::Int, list::LList)
+      """
+      Add a new element to the end of the linked list
+      """
+      while list.next != nothing
+          list = list.next
+      end
+      list.next = NewNode(K, nothing)
+  end
+#+END_SRC
+
+#+BEGIN_SRC julia :kernel julia
+  list = LList(1, nothing)
+  Append(2, list)
+  Append(3, list)
+  list
+#+END_SRC
+
+b.
+
+#+BEGIN_SRC julia :kernel julia
+  function Append(K::Int)
+      """
+      Add a new element to the end of the linked list
+      """
+      P = list
+      while P.next != nothing
+          P = P.next
+      end
+      P.next = NewNode(K, nothing)
+  end
+#+END_SRC
+
+#+BEGIN_SRC julia :kernel julia
+  Append(4)
+  list
+#+END_SRC

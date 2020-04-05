@@ -1,6 +1,6 @@
 Q.
 
-A Frob is an object that is available in three different sizes, and has
+A *Frob* is an object that is available in three different sizes, and has
 front, middle, and back parts, each of which (independently) can be
 painted any of ten colors, or can be left unpainted.
 
@@ -11,17 +11,17 @@ each field, and for the entire record structure?
 b. It is possible to represent a Frob uniquely by using only 12 bits.
 Explain how to encode the size and three color values to produce
 the encoded representation of a Frob, and how to decode the
-representation of a Frob to extract its size and three color values
+representation of a Frob to extract its size and three color values.
 
 A.
 
 a.
 
 To make each part painted any of ten color or not painted, we need at least 4 bits. To decide what size a Frob is, we need 2 bits.
-A Frob needs at least 14 bits, so the minimum number of bits for each filed is 14, and for the entire record structure is 56.
+So each field needs 4 bits and the entire size of Frob is 14 bits.
 
 b.
 
-We can make 16 bit patterns with 4 bits, but we need only 11 bit patterns to decide what color it is.
-If we choose one pattern (like 1110) and use one bit to decide a size (1111), we can represent a Frob with 12 bits.
-Then, we can decode the representation of a Frob by taking four bits each.
+Since a number of cases that the three fields are colored is 11^3=1331 and there are three different sizes,
+The whole number of cases is 3993, which is lower than 2^12=4096.
+So 12 bits are enough to represent a Frob.

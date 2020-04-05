@@ -1,0 +1,36 @@
+Q.
+
+Write a routine $LLMember(K, P)$, which takes a key $K$ and a linked
+list $P$ and returns *true* or *false*, depending on whether $K$ is in the
+list. You should assume that the list has been constructed using
+Algorithm 1.5 or 1.6, so that the keys are in order in the list.
+
+A.
+
+#+BEGIN_SRC julia :kernel julia
+  function LLMember(K::Int, P::LList)::Bool
+      while P != nothing && P.key < K
+          P = P.next
+      end
+      if P == nothing
+          return false
+      elseif P.key == K
+          return true
+      else
+          return false
+      end
+  end
+#+END_SRC
+
+#+BEGIN_SRC julia :kernel julia
+  include("LLInsert.jl")
+  include("NewNode.jl")
+
+  list = NewNode(1, nothing)
+  LLInsert(2, list)
+  LLInsert(3, list)
+  list
+
+  LLMember(3, list)
+  LLMember(5, list)
+#+END_SRC
