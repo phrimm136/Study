@@ -1,0 +1,17 @@
+Q.
+
+Show that if $m$ and $n$ are integers and $m \neq 0$ then
+$\lceil n/m \rceil \le (n-1)/m + 1$.
+Under what conditions does equality hold? What if $m$ or $n$ is not an
+integer?
+
+A.
+
+$\lceil x \rceil = \lfloor x \rfloor + 1 < x + 1$ if $x$ is not integer.
+If $(n-1)/m$ is integer, $\lceil n/m \rceil = (n-1)/m + 1$.
+Otherwise, $\lceil n/m \rceil < (n-1)/m + 1$.
+
+So $\lceil n/m \rceil \le (n-1)/m + 1$.
+
+
+If $n$ is negative decimal or $m$ is less than $0.5$, equation doesn't hold.

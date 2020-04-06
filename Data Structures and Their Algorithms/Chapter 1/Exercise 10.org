@@ -49,34 +49,78 @@ A.
 
 a.
 
-procedure Swap(key X, key Y):
-    T <- X
-    X <- Y
-    Y <- T
+#+BEGIN_SRC julia :kernel julia
+  # Since julia can'tpass Int by reference, I didn't use function.
+  X = 1
+  Y = 2
+
+  T = X
+  X = Y
+  Y = T
+  print(X)
+  print(Y)
+#+END_SRC
 
 b.
 
-procedure RotateOne(table X[1...n]):
-    T <- X[1]
-    for i from 1 to n-1 do
-	X[i] <- X[i+1]
-    x[n] <- T
+#+BEGIN_SRC julia :kernel julia
+  function RotateOne(T::Array{Int})
+      tmp = T[1]
+      for i in 1:length(T)-1
+          T[i] = T[i+1]
+      end
+      T[end] = tmp
+  end
+#+END_SRC
+
+#+BEGIN_SRC julia :kernel julia
+  T = [1 2 3 4 5]
+  RotateOne(T)
+  print(T)
+#+END_SRC
 
 c.
 
-procedure SimultaneousAssignments(table X[1...n], table Y[1...n])
-    T <- Y
-    for i from 1 to n do
-        X[i] <- T[i]
+#+BEGIN_SRC julia :kernel julia
+  function SimultaneousAssignments(X::Array{Int}, Y::Array{Int})
+      for i in 1:length(X)
+          X[i] = Y[i]
+      end
+  end
+#+END_SRC
+
+#+BEGIN_SRC julia :kernel julia
+  X = [1 2 3 4 5]
+  Y = [6 7 8 9 0]
+  SimultaneousAssignments(X, Y)
+  print(X)
+#+END_SRC
 
 d.
 
-procedure RotateOne(table X[1...n]):
-    for i from i to n-1 do
-        Swap(X[i], X[(i+1)%n])
+#+BEGIN_SRC julia :kernel julia
+  function RotateOne(T::Array{Int})
+      for i in 1:length(T)-1
+          T[i], T[i+1] = T[i+1], T[i]
+      end
+  end
 
-procedure SimultaneousAssignments(table X[1...n], table Y[1...n])
-    for i from 1 to n do
-        Swap(X[i], Y[i])
+  function SimultaneousAssignments(X::Array{Int}, Y::Array{Int})
+      for i in 1:length(X)
+          X[i], Y[i] = Y[i], X[i]
+      end
+  end
+#+END_SRC
+
+#+BEGIN_SRC julia :kernel julia
+  T = [1 2 3 4 5]
+  RotateOne(T)
+  print(T)
+
+  X = [1 2 3 4 5]
+  Y = [6 7 8 9 0]
+  SimultaneousAssignments(X, Y)
+  print(X)
+#+END_SRC
 
 =#

@@ -1,0 +1,14 @@
+Q.
+
+Show that the relationship
+$\lfloor \frac{\lfloor x/y \rfloor}{z} \rfloor = \lfloor \frac{\lfloor x/z \rfloor}{y} \rfloor$
+does not always hold for real numbers $x$, $y$, and $z$, but that is does
+hold for integers $x$, $y$, and $z$.
+
+A.
+
+If $y$ or $z$ are real number lower than 1,
+$x/y$ and $x/z$ are greater than $x$, $y$, and $z$
+which lead that the equation does not hold. (ex. 4 0.1 3)
+Since fragment of $x/y$ and $x/z$ does not affect quotient of the result,
+the order of division and flooring with integer variables doesn't matter.

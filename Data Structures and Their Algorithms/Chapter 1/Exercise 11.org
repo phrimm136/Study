@@ -1,0 +1,27 @@
+Q.
+
+Which of the following are true for any real numbers $x$ and $y$?
+Explain or give a counterexample.
+
+a. $\lfloor x+y \rfloor \ge \lfloor x \rfloor + \lfloor y \rfloor$
+
+b. $\lfloor \lceil x \rceil \rfloor + 1 = \lceil \lfloor x \rfloor \rceil$
+
+c. $\lfloor |x| \rfloor = | \lfloor x \rfloor |$
+
+A.
+
+a.
+
+If a sum of fractional parts of x and y is greater than or equal to 1,
+$\lfloor x+y \rfloor = \lfloor x \rfloor + \lfloor y \rfloor + 1$, true.
+If a sum of fractional parts of x and y is lesser than 1,
+$\lfloor x+y \rfloor = \lfloor x \rfloor + \lfloor y \rfloor$, true.
+
+b.
+
+$\lceil x \rceil = \lfloor x \rfloor + 1$. The outer floor and ceiling don't change the results. false
+
+c.
+
+$4.9 \rightarrow \lfloor |4.9| \rfloor = 5, |\lfloor x \rfloor| = 4$. false
